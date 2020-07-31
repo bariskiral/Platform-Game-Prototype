@@ -22,7 +22,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed = 8f;
     [SerializeField] private float gravityMultiplier = 1f;
     [SerializeField] private float jumpSpeed = 15f;
-    [SerializeField] private float waitTime;
 
 
 
