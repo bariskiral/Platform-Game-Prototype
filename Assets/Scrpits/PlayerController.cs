@@ -8,17 +8,30 @@ public class PlayerController : MonoBehaviour
 
     private InputControls inputControls;
     private Rigidbody2D rb;
-    private Collider2D col;
-    [SerializeField] private float moveSpeed = 7f;
-    [SerializeField] private float fallMultiplier = 2.5f;
-    [SerializeField] private float jumpSpeed = 7f;
+    private SpriteRenderer spriteRenderer;
+
+    private bool isGrounded;
+    private int extraJumps;
+
+    [SerializeField] private Animator anim;
+    [SerializeField] private Transform groudCheck;
     [SerializeField] private LayerMask ground;
+
+    [SerializeField] private int jumpCount;
+    [SerializeField] private float checkRadius;
+    [SerializeField] private float moveSpeed = 8f;
+    [SerializeField] private float gravityMultiplier = 1f;
+    [SerializeField] private float jumpSpeed = 15f;
+    [SerializeField] private float waitTime;
+
+
 
     private void Awake()
     {
         inputControls = new InputControls();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
-        col = GetComponent<Collider2D>();
+        anim = GetComponent<Animator>();
     }
 
     private void OnEnable()
@@ -33,45 +46,69 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        extraJumps = jumpCount;
         inputControls.Player.Jump.performed += ctx => Jump();
-        inputControls.Player.Fire.performed += ctx => Attack();
+        inputControls.Player.Attack.performed += ctx => Attack();
+        inputControls.Player.Dash.performed += ctx => Dash();
     }
 
     private void Attack()
     {
-        Debug.Log("Fire!");
+        anim.SetTrigger("Fire");
+        //TODO
+    }
+
+    private void Dash()
+    {
+        anim.SetTrigger("Dash");
+        //TODO
     }
 
     private void Jump()
     {
-        if (IsGrounded())
+        if (isGrounded)
         {
-            rb.AddForce(new Vector2(0, jumpSpeed), ForceMode2D.Impulse);
+            extraJumps = jumpCount;
+        }
+
+        if (extraJumps>0)
+        {
+            rb.velocity = Vector2.up * jumpSpeed;
+            extraJumps--;
         }
     }
 
-    private bool IsGrounded()
+    void FixedUpdate()
     {
-        Vector2 topLeftPoint = transform.position;
-        topLeftPoint.x -= col.bounds.extents.x;
-        topLeftPoint.y += col.bounds.extents.y;
+        //Are we collide with ground?
+        isGrounded = Physics2D.OverlapCircle(groudCheck.position, checkRadius, ground);
 
-        Vector2 bottomLeftPoint = transform.position;
-        bottomLeftPoint.x += col.bounds.extents.x;
-        bottomLeftPoint.y -= col.bounds.extents.y;
+        //Sideways movement
+        Vector2 moveInput = inputControls.Player.Move.ReadValue<Vector2>();
+        rb.velocity = new Vector2(moveInput.x*moveSpeed, rb.velocity.y);
 
-        return Physics2D.OverlapArea(topLeftPoint, bottomLeftPoint, ground);
-    }
+        anim.SetFloat("Speed", Math.Abs(moveInput.x));
+
+        //Sprite flip
+        if (moveInput.x < 0)
+        {
+            spriteRenderer.flipX = true;
+        }
+        else if (moveInput.x > 0)
+        {
+            spriteRenderer.flipX = false;
+        }
 
 
-    void Update()
-    {
-        float moveInput = inputControls.Player.Move.ReadValue<float>();
-        rb.velocity = new Vector2(moveInput*moveSpeed, rb.velocity.y);
-        //if (rb.velocity.y < 0)
-        //{
-        //    rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
-        //}
+        //Gravity changer for speed up jumping and falling
+        if (rb.velocity.y < 0)
+        {
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (gravityMultiplier - 1) * Time.deltaTime;
+        }
+        else if (rb.velocity.y > 0)
+        {
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (gravityMultiplier + 1) * Time.deltaTime;
+        }
 
     }
 
