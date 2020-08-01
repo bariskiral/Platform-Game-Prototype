@@ -35,7 +35,7 @@ public class VerticalPlatform : MonoBehaviour
     {
         Vector2 moveVec = inputControls.Player.Move.ReadValue<Vector2>();
 
-        if (moveVec.y == 0)
+        if (moveVec.y >= 0)
         {
             waitTime = holdTime;
             effector.rotationalOffset = 0;
@@ -51,10 +51,6 @@ public class VerticalPlatform : MonoBehaviour
             {
                 waitTime -= Time.deltaTime;
             }
-        }
-        if (moveVec.y > 0)
-        {
-            effector.rotationalOffset = 0;
         }
     }
 }
