@@ -17,7 +17,7 @@ public class PatrolLine : MonoBehaviour
     private int distanceCount;
 
     [SerializeField] private float speed = 5f;
-    [SerializeField] private float rotateSpeed = 5f;
+    [SerializeField] private float rotateSpeed = 300f;
 
     void Start()
     {
@@ -31,7 +31,7 @@ public class PatrolLine : MonoBehaviour
 
     void FixedUpdate()
     {
-        transform.Rotate(0, 0, rotateSpeed);
+        transform.Rotate(0, 0, rotateSpeed * Time.deltaTime);
         goToNodes();
     }
 

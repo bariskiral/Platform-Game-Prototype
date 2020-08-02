@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     private InputControls inputControls;
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
+    private PlayerHealth playerHealth;
 
     private bool isGrounded;
     private int extraJumps;
@@ -31,6 +32,7 @@ public class PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        playerHealth = GetComponent<PlayerHealth>();
     }
 
     private void OnEnable()
@@ -54,7 +56,7 @@ public class PlayerController : MonoBehaviour
     private void Attack()
     {
         anim.SetTrigger("Fire");
-        //TODO
+        playerHealth.gainHealth(1);
     }
 
     private void Dash()
