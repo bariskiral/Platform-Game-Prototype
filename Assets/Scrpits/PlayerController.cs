@@ -20,9 +20,13 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private int jumpCount;
     [SerializeField] private float checkRadius;
+    [SerializeField] private float dashPower = 100f;
+    [SerializeField] private float dashCD;
     [SerializeField] private float moveSpeed = 8f;
     [SerializeField] private float gravityMultiplier = 1f;
     [SerializeField] private float jumpSpeed = 15f;
+    [SerializeField] private bool rangedWeapon = true;
+    [SerializeField] private bool meleeWeapon = false;
 
 
 
@@ -34,6 +38,7 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         playerHealth = GetComponent<PlayerHealth>();
     }
+
 
     private void OnEnable()
     {
@@ -51,12 +56,39 @@ public class PlayerController : MonoBehaviour
         inputControls.Player.Jump.performed += ctx => Jump();
         inputControls.Player.Attack.performed += ctx => Attack();
         inputControls.Player.Dash.performed += ctx => Dash();
+        inputControls.Player.WeaponSwap.performed += ctx => Swap();
+    }
+
+    private void Swap()
+    {
+        if (rangedWeapon)
+        {
+            meleeWeapon = true;
+            rangedWeapon = false;
+        }
+        else
+        {
+            meleeWeapon = false;
+            rangedWeapon = true;
+
+        }
     }
 
     private void Attack()
     {
-        anim.SetTrigger("Fire");
-        playerHealth.gainHealth(1);
+        //TODO
+        if (rangedWeapon)
+        {
+            anim.SetTrigger("Fire");
+            playerHealth.gainHealth(1);
+            Debug.Log("ranged");
+        }
+        if (meleeWeapon)
+        {
+            anim.SetTrigger("Hit");
+            playerHealth.gainHealth(5);
+            Debug.Log("melee");
+        }
     }
 
     private void Dash()

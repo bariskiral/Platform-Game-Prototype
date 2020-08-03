@@ -2602,7 +2602,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86576c91df0cb1b4dbca39ff4c122410, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  body2d: {fileID: 0}
+  rb: {fileID: 0}
   leftPushRange: -0.3
   rightPushRange: 0.3
   velocityThreshold: 100
@@ -2761,9 +2761,13 @@ MonoBehaviour:
     m_Bits: 256
   jumpCount: 1
   checkRadius: 0.5
+  dashPower: 100
+  dashCD: 0
   moveSpeed: 8
   gravityMultiplier: 1
   jumpSpeed: 15
+  rangedWeapon: 1
+  meleeWeapon: 0
 --- !u!61 &1334609353
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2777,7 +2781,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.061957017}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -2788,7 +2792,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5208333, y: 0.8125}
+  m_Size: {x: 0.5208333, y: 0.688586}
   m_EdgeRadius: 0
 --- !u!50 &1334609354
 Rigidbody2D:
@@ -2842,7 +2846,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ed20da882c89c84faa191fb6b697c78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currHealth: 1000
+  currHealth: 100
 --- !u!111 &1334609357
 Animation:
   m_ObjectHideFlags: 0

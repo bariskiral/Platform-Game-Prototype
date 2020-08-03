@@ -43,10 +43,10 @@ public class PatrolLine : MonoBehaviour
             getDistance = false;
         }
 
-        float mesafe = Vector3.Distance(transform.position, nodes[distanceCount].transform.position);
+        float otherDistance = Vector3.Distance(transform.position, nodes[distanceCount].transform.position);
         transform.position += distance * Time.deltaTime * speed;
 
-        if (mesafe < 0.5f)
+        if (otherDistance < 0.5f)
         {
             getDistance = true;
             if (distanceCount == nodes.Length - 1)
