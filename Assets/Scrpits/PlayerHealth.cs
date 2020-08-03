@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public int currHealth;
+    [SerializeField] private int currHealth;
+    private GameObject player;
 
     private void Awake()
     {
         //currHealth = 10;
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     void Update()
@@ -23,6 +25,7 @@ public class PlayerHealth : MonoBehaviour
     public void takeDamage(int dmgAmount)
     {
         currHealth -= dmgAmount;
+        player.GetComponent<Animation>().Play("Damaged");
     }
 
     public void gainHealth(int hpAmount)
