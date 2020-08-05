@@ -646,7 +646,7 @@ GameObject:
   - component: {fileID: 773219844}
   m_Layer: 8
   m_Name: Ground Tilemap
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2027,56 +2027,18 @@ CompositeCollider2D:
   m_ColliderPaths:
   - m_Collider: {fileID: 773219845}
     m_ColliderPaths:
-    - - X: 139583362
-        Y: 79999905
-      - X: 140000070
-        Y: 80208259
-      - X: 140000100
-        Y: 80208308
-      - X: 140000100
-        Y: 100000041
-      - X: 140000041
-        Y: 100000100
-      - X: 39999959
-        Y: 100000100
-      - X: 39999900
-        Y: 100000041
-      - X: 39999900
-        Y: 80416652
-      - X: 39999905
-        Y: 80416630
-      - X: 40208255
-        Y: 79999930
-      - X: 40208304
-        Y: 79999900
-      - X: 139583340
-        Y: 79999900
-    - - X: 139999900
-        Y: -40000041
-      - X: 139999900
-        Y: -29999959
-      - X: 139999959
-        Y: -29999900
-      - X: 140000100
-        Y: -29999900
-      - X: 140000100
-        Y: 20000041
-      - X: 140000041
-        Y: 20000100
-      - X: 99999959
-        Y: 20000100
-      - X: 99999900
-        Y: 20000041
-      - X: 99999900
-        Y: -39583348
-      - X: 99999905
-        Y: -39583370
-      - X: 100208251
-        Y: -40000070
-      - X: 100208300
-        Y: -40000100
-      - X: 139999959
-        Y: -40000100
+    - - X: 140000000
+        Y: 80208336
+      - X: 140000000
+        Y: 100000000
+      - X: 40000000
+        Y: 100000000
+      - X: 40000000
+        Y: 80416664
+      - X: 40208332
+        Y: 80000000
+      - X: 139583328
+        Y: 80000000
     - - X: 80000000
         Y: -39791664
       - X: 80000000
@@ -2091,18 +2053,6 @@ CompositeCollider2D:
         Y: 10000000
       - X: 40000000
         Y: -10000000
-      - X: 20000100
-        Y: -10000000
-      - X: 20000100
-        Y: -9999959
-      - X: 20000041
-        Y: -9999900
-      - X: -10000041
-        Y: -9999900
-      - X: -10000100
-        Y: -9999959
-      - X: -10000100
-        Y: -10000000
       - X: -80000000
         Y: -10000000
       - X: -80000000
@@ -2111,47 +2061,43 @@ CompositeCollider2D:
         Y: -40000000
       - X: 79583336
         Y: -40000000
-    - - X: -110416638
-        Y: -40000095
-      - X: -109999930
-        Y: -39791741
-      - X: -109999900
-        Y: -39791692
-      - X: -109999900
-        Y: -10416646
-      - X: -109999915
-        Y: -10416609
-      - X: -110416615
-        Y: -9999915
-      - X: -110416652
-        Y: -9999900
-      - X: -190000041
-        Y: -9999900
-      - X: -190000100
-        Y: -9999959
-      - X: -190000100
-        Y: -39583348
-      - X: -190000095
-        Y: -39583370
-      - X: -189791741
-        Y: -40000070
-      - X: -189791692
-        Y: -40000100
-      - X: -110416660
-        Y: -40000100
+    - - X: 140000000
+        Y: 20000000
+      - X: 100000000
+        Y: 20000000
+      - X: 100000000
+        Y: -39583336
+      - X: 100208328
+        Y: -40000000
+      - X: 140000000
+        Y: -40000000
+    - - X: -110000000
+        Y: -39791664
+      - X: -110000000
+        Y: -10416666
+      - X: -110416672
+        Y: -10000000
+      - X: -190000000
+        Y: -10000000
+      - X: -190000000
+        Y: -39583336
+      - X: -189791664
+        Y: -40000000
+      - X: -110416672
+        Y: -40000000
   m_CompositePaths:
     m_Paths:
-    - - {x: 13.958328, y: 7.8999906}
-      - {x: 14.00001, y: 7.9208474}
-      - {x: 13.999974, y: 9.900009}
-      - {x: 3.99999, y: 9.899974}
-      - {x: 3.9999933, y: 7.9416575}
-      - {x: 4.0208473, y: 7.8999906}
-    - - {x: 13.999967, y: -4.10001}
-      - {x: 13.999974, y: 1.90001}
-      - {x: 9.99999, y: 1.8999748}
-      - {x: 9.999993, y: -4.0583425}
-      - {x: 10.020846, y: -4.10001}
+    - - {x: 13.958326, y: 7.9}
+      - {x: 14, y: 7.9208503}
+      - {x: 13.999971, y: 9.9}
+      - {x: 4, y: 9.89997}
+      - {x: 4.000003, y: 7.9416614}
+      - {x: 4.0208497, y: 7.9}
+    - - {x: 13.999971, y: -4.1}
+      - {x: 13.999971, y: 1.9}
+      - {x: 10, y: 1.8999708}
+      - {x: 10.000003, y: -4.058339}
+      - {x: 10.02085, y: -4.1}
     - - {x: 7.9583282, y: -4.1}
       - {x: 8, y: -4.0791497}
       - {x: 7.999992, y: 1.858341}
@@ -2163,13 +2109,13 @@ CompositeCollider2D:
       - {x: -8, y: -1.1000293}
       - {x: -7.9999976, y: -4.058339}
       - {x: -7.9791503, y: -4.1}
-    - - {x: -11.041672, y: -4.10001}
-      - {x: -10.99999, y: -4.079153}
-      - {x: -10.999999, y: -1.1416533}
-      - {x: -11.0416765, y: -1.09999}
-      - {x: -19.00001, y: -1.1000252}
-      - {x: -19.000006, y: -4.0583425}
-      - {x: -18.979153, y: -4.10001}
+    - - {x: -11.041673, y: -4.1}
+      - {x: -11, y: -4.0791497}
+      - {x: -11.000009, y: -1.141659}
+      - {x: -11.041678, y: -1.1}
+      - {x: -19, y: -1.1000293}
+      - {x: -18.999996, y: -4.058339}
+      - {x: -18.97915, y: -4.1}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
 --- !u!19719996 &773219845
@@ -2602,7 +2548,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86576c91df0cb1b4dbca39ff4c122410, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
   leftPushRange: -0.3
   rightPushRange: 0.3
   velocityThreshold: 100
@@ -2739,6 +2684,7 @@ Transform:
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 1616167648}
+  - {fileID: 1965196425}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2766,6 +2712,7 @@ MonoBehaviour:
   moveSpeed: 8
   gravityMultiplier: 1
   jumpSpeed: 15
+  attackDelay: 0.5
   rangedWeapon: 1
   meleeWeapon: 0
 --- !u!61 &1334609353
@@ -2906,7 +2853,7 @@ GameObject:
   m_Layer: 10
   m_Name: GroundCheck
   m_TagString: Untagged
-  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -3582,3 +3529,49 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &1965196424
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1965196425}
+  - component: {fileID: 1965196426}
+  m_Layer: 9
+  m_Name: Bow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1965196425
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1965196424}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.25, y: 0.07, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1334609351}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1965196426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1965196424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56129f37e54fd564ca500d93445b398a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrow: {fileID: 6591397333217673708, guid: 0de10aa0feef8ee46a8885adb0e6840e, type: 3}
+  shotForce: 20
+  shotPoint: {fileID: 1965196425}

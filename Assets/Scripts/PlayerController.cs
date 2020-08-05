@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -10,9 +12,11 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private PlayerHealth playerHealth;
+    private BowScript bow;
 
     private bool isGrounded;
     private int extraJumps;
+    private float elapsedTime = 0;
 
     [SerializeField] private Animator anim;
     [SerializeField] private Transform groudCheck;
@@ -25,6 +29,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed = 8f;
     [SerializeField] private float gravityMultiplier = 1f;
     [SerializeField] private float jumpSpeed = 15f;
+    [SerializeField] private float attackDelay = 0.5f;
     [SerializeField] private bool rangedWeapon = true;
     [SerializeField] private bool meleeWeapon = false;
 
@@ -37,6 +42,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         playerHealth = GetComponent<PlayerHealth>();
+        bow = GetComponentInChildren<BowScript>();
     }
 
 
@@ -54,8 +60,8 @@ public class PlayerController : MonoBehaviour
     {
         extraJumps = jumpCount;
         inputControls.Player.Jump.performed += ctx => Jump();
-        inputControls.Player.Attack.performed += ctx => Attack();
         inputControls.Player.Dash.performed += ctx => Dash();
+        inputControls.Player.Attack.performed += ctx => Attack();
         inputControls.Player.WeaponSwap.performed += ctx => Swap();
     }
 
@@ -70,24 +76,23 @@ public class PlayerController : MonoBehaviour
         {
             meleeWeapon = false;
             rangedWeapon = true;
-
         }
     }
 
     private void Attack()
     {
         //TODO
-        if (rangedWeapon)
+        if (rangedWeapon && Time.time > elapsedTime)
         {
             anim.SetTrigger("Fire");
-            playerHealth.gainHealth(1);
-            Debug.Log("ranged");
+            bow.GetComponent<BowScript>().BowAttack();
+            elapsedTime = Time.time + attackDelay;
         }
-        if (meleeWeapon)
+        if (meleeWeapon && Time.time > elapsedTime)
         {
             anim.SetTrigger("Hit");
-            playerHealth.gainHealth(5);
-            Debug.Log("melee");
+            
+            elapsedTime = Time.time + attackDelay;
         }
     }
 
@@ -113,6 +118,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        #region Movement
         //Are we collide with ground?
         isGrounded = Physics2D.OverlapCircle(groudCheck.position, checkRadius, ground);
 
@@ -142,7 +148,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity += Vector2.up * Physics2D.gravity.y * (gravityMultiplier + 1) * Time.deltaTime;
         }
-
+        #endregion
     }
 
 }

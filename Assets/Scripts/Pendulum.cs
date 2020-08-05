@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Pendulum : MonoBehaviour
 {
-    [SerializeField] private Rigidbody2D rb;
+    private Rigidbody2D rb;
     [SerializeField] private float leftPushRange;
     [SerializeField] private float rightPushRange;
     [SerializeField] private float velocityThreshold;
