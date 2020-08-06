@@ -10,8 +10,6 @@ public class PlayerController : MonoBehaviour
 
     private InputControls inputControls;
     private Rigidbody2D rb;
-    private SpriteRenderer spriteRenderer;
-    private PlayerHealth playerHealth;
     private BowScript bow;
 
     private bool isGrounded;
@@ -19,8 +17,8 @@ public class PlayerController : MonoBehaviour
     private float elapsedTime = 0;
 
     [SerializeField] private Animator anim;
-    [SerializeField] private Transform groudCheck;
     [SerializeField] private LayerMask ground;
+    [SerializeField] private Transform groudCheck;
 
     [SerializeField] private int jumpCount;
     [SerializeField] private float checkRadius;
@@ -38,10 +36,8 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         inputControls = new InputControls();
-        spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        playerHealth = GetComponent<PlayerHealth>();
         bow = GetComponentInChildren<BowScript>();
     }
 
@@ -131,11 +127,11 @@ public class PlayerController : MonoBehaviour
         //Sprite flip
         if (moveInput.x < 0)
         {
-            spriteRenderer.flipX = true;
+            transform.eulerAngles = new Vector2(0, -180);
         }
         else if (moveInput.x > 0)
         {
-            spriteRenderer.flipX = false;
+            transform.eulerAngles = new Vector2(0, 0);
         }
 
 

@@ -17,7 +17,7 @@ public class BowScript : MonoBehaviour
 
     void Update()
     {
-        
+        //Mouse follow
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         Vector2 direction = new Vector2(
             mousePosition.x - transform.position.x,

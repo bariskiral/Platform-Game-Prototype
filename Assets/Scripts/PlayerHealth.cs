@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] private int currHealth;
+    [SerializeField] private float currHealth;
     private GameObject player;
     private Animator anim;
     private Rigidbody2D rb;
@@ -21,7 +21,7 @@ public class PlayerHealth : MonoBehaviour
         //Debug.Log(currHealth);
     }
 
-    public void takeDamage(int dmgAmount)
+    public void takeDamage(float dmgAmount)
     {
         currHealth -= dmgAmount;
         player.GetComponent<Animation>().Play("Damaged");
@@ -31,7 +31,7 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    public void gainHealth(int hpAmount)
+    public void gainHealth(float hpAmount)
     {
         currHealth += hpAmount;
     }
