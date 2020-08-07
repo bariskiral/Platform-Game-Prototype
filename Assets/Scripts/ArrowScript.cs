@@ -8,7 +8,7 @@ public class ArrowScript : MonoBehaviour
 {
     private float destroyTime = 5f;
 
-    [SerializeField] private float damage = 1f;
+    [SerializeField] private float arrowDamage = 1f;
 
     private GameObject player;
     private PlayerHealth playerHealth;
@@ -22,7 +22,7 @@ public class ArrowScript : MonoBehaviour
     void Update()
     {
         //Fade out
-        GetComponent<SpriteRenderer>().color -= new Color(0, 0, 0, 0.001f);
+        GetComponent<SpriteRenderer>().color -= new Color(0, 0, 0, 0.002f);
         Destroy(gameObject, destroyTime * 2);
     }
 
@@ -44,14 +44,18 @@ public class ArrowScript : MonoBehaviour
 
         if (col.gameObject.CompareTag("Enemy"))
         {
-            playerHealth.gainHealth(damage);
+            playerHealth.GainHealth(arrowDamage);
+            //TODO: Damage enemies with arrow
             Destroy(gameObject);
         }
     }
 
     private void OnDestroy()
     {
-        Destroy(transform.parent.gameObject);
+        if(transform.parent != null)
+        {
+            Destroy(transform.parent.gameObject);
+        }
     }
-    
+
 }

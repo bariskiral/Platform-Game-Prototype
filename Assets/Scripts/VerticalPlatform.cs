@@ -9,11 +9,11 @@ public class VerticalPlatform : MonoBehaviour
     private InputControls inputControls;
     private float waitTime;
 
-    [SerializeField] private float holdTime = 0.1f; 
+    [SerializeField] private float holdTime = 0.1f;
 
     private void Awake()
     {
-        inputControls = new InputControls();    
+        inputControls = new InputControls();
     }
 
     void Start()

@@ -1,13 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
     [SerializeField] private float currHealth;
+    [SerializeField] private TextMeshProUGUI healthText;
+
     private GameObject player;
     private Animator anim;
     private Rigidbody2D rb;
+
 
     private void Awake()
     {
@@ -19,9 +23,17 @@ public class PlayerHealth : MonoBehaviour
     void Update()
     {
         //Debug.Log(currHealth);
+        if (currHealth >= 0)
+        {
+            healthText.text = "HP: " + currHealth;
+        }
+        else
+        {
+            healthText.text = "HP: 0";
+        }
     }
 
-    public void takeDamage(float dmgAmount)
+    public void TakeDamage(float dmgAmount)
     {
         currHealth -= dmgAmount;
         player.GetComponent<Animation>().Play("Damaged");
@@ -31,7 +43,7 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    public void gainHealth(float hpAmount)
+    public void GainHealth(float hpAmount)
     {
         currHealth += hpAmount;
     }

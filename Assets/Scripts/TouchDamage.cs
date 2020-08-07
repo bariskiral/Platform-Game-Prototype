@@ -10,7 +10,7 @@ public class TouchDamage : MonoBehaviour
 
     [SerializeField] private float currTime;
     [SerializeField] private float nextDmg;
-    [SerializeField] private int damageValue;
+    [SerializeField] private float damageValue;
 
     private void Awake()
     {
@@ -20,9 +20,9 @@ public class TouchDamage : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D col)
     {
-        if (col.gameObject == player && currTime<=0)
+        if (col.gameObject == player && currTime <= 0)
         {
-            playerHealth.takeDamage(damageValue);
+            playerHealth.TakeDamage(damageValue);
             currTime = nextDmg;
         }
         else

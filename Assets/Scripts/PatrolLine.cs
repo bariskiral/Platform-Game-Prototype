@@ -32,10 +32,10 @@ public class PatrolLine : MonoBehaviour
     void FixedUpdate()
     {
         transform.Rotate(0, 0, rotateSpeed * Time.deltaTime);
-        goToNodes();
+        GoToNodes();
     }
 
-    void goToNodes()
+    void GoToNodes()
     {
         if (getDistance)
         {
