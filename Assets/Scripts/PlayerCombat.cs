@@ -67,6 +67,7 @@ public class PlayerCombat : MonoBehaviour
     private void BowAttack()
     {
         anim.SetTrigger("Fire");
+
         GameObject newArrow = Instantiate(arrow, shotPoint.position, shotPoint.rotation);
         newArrow.GetComponent<Rigidbody2D>().velocity = transform.right * shotForce;
     }
@@ -74,6 +75,7 @@ public class PlayerCombat : MonoBehaviour
     private void SwordAttack()
     {
         anim.SetTrigger("Hit");
+
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(hitPoint.position, attackRange, enemyLayers);
 
         foreach (Collider2D enemy in hitEnemies)
