@@ -233,6 +233,17 @@
                     "action": "WeaponSwap",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "64f11c2a-505c-43c2-8eac-c889831dec0c",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "WeaponSwap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

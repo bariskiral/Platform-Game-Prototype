@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/Scrpits/InputControls.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/Scripts/InputControls.inputactions'
 
 using System;
 using System.Collections;
@@ -243,6 +243,17 @@ public class @InputControls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard+Mouse"",
+                    ""action"": ""WeaponSwap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""64f11c2a-505c-43c2-8eac-c889831dec0c"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""WeaponSwap"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false

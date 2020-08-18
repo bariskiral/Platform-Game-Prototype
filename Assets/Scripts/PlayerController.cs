@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour
 
         anim.SetFloat("Speed", Math.Abs(moveInput.x));
 
-        //Sprite flip
+        //Character flip
         if (moveInput.x < 0)
         {
             transform.eulerAngles = new Vector2(0, -180);

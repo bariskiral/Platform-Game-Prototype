@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-public class PatrolLine : MonoBehaviour
+public class ObjectRoute : MonoBehaviour
 {
 
     private GameObject[] nodes;
@@ -88,14 +88,14 @@ public class PatrolLine : MonoBehaviour
 }
 
 #if UNITY_EDITOR
-[CustomEditor(typeof(PatrolLine))]
+[CustomEditor(typeof(ObjectRoute))]
 [System.Serializable]
 
 class partolLineEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        PatrolLine script = (PatrolLine)target;
+        ObjectRoute script = (ObjectRoute)target;
         if (GUILayout.Button("Create", GUILayout.MinWidth(100), GUILayout.Width(100)))
         {
             GameObject newObject = new GameObject();

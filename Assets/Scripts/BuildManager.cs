@@ -19,7 +19,6 @@ public class BuildManager : MonoBehaviour
         slot1.GetComponent<SlotScript>().Setup(tempBuff);
         listBuff.Remove(tempBuff);
 
-
         GameObject slot2 = Instantiate(Slot, slotsContent2.position, Quaternion.identity);
         slot2.transform.SetParent(slotsContent2);
         tempBuff = listBuff[Random.Range(0, listBuff.Count)];

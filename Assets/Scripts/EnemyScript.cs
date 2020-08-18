@@ -5,11 +5,9 @@ using UnityEngine;
 public class EnemyScript : MonoBehaviour
 {
     [SerializeField] private Animator anim;
-
     [SerializeField] private float maxHealth = 10f;
 
     private float currHealth;
-
 
     void Start()
     {

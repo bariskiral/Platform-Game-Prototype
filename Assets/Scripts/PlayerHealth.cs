@@ -12,7 +12,6 @@ public class PlayerHealth : MonoBehaviour
     private Animator anim;
     private Rigidbody2D rb;
 
-
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -22,7 +21,6 @@ public class PlayerHealth : MonoBehaviour
 
     void Update()
     {
-        //Debug.Log(currHealth);
         if (currHealth >= 0)
         {
             healthText.text = "HP: " + currHealth;

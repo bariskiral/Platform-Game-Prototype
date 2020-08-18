@@ -21,16 +21,6 @@ public class VerticalPlatform : MonoBehaviour
         effector = GetComponent<PlatformEffector2D>();
     }
 
-    private void OnEnable()
-    {
-        inputControls.Enable();
-    }
-
-    private void OnDisable()
-    {
-        inputControls.Disable();
-    }
-
     void FixedUpdate()
     {
         Vector2 moveVec = inputControls.Player.Move.ReadValue<Vector2>();
@@ -52,5 +42,30 @@ public class VerticalPlatform : MonoBehaviour
                 waitTime -= Time.deltaTime;
             }
         }
+    }
+
+    //Move with platform on collision
+
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("Player"))
+        {
+            col.gameObject.transform.SetParent(transform);
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D col)
+    {
+        col.gameObject.transform.SetParent(null);
+    }
+
+    private void OnEnable()
+    {
+        inputControls.Enable();
+    }
+
+    private void OnDisable()
+    {
+        inputControls.Disable();
     }
 }
