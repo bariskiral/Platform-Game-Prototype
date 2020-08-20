@@ -7,7 +7,7 @@ public class RatScript : EnemyController
     private Vector2 moveDir;
     private Vector2 movePerSec;
     private float timePassed;
-    private bool canRoam = false;
+    private bool canRoam = true;
 
     [SerializeField] private float dirChangeTime = 2f;
     
@@ -15,24 +15,25 @@ public class RatScript : EnemyController
     {
         base.Start();
         timePassed = 0f;
-        calcuateNewMovementVector();
+        NewMoveVector();
     }
 
-    protected override void Update()
+    protected override void FixedUpdate()
     {
+        base.FixedUpdate();
         if (canRoam)
         {
-            enemyRoam();
+            EnemyRoam();
         }
     }
 
-    private void calcuateNewMovementVector()
+    private void NewMoveVector()
     {
         moveDir = new Vector2(Random.Range(-1.0f, 1.0f), 0).normalized;
         movePerSec = moveDir * enemySpeed;
     }
 
-    private void enemyRoam()
+    private void EnemyRoam()
     {
         if (Time.time - timePassed > dirChangeTime)
         {
