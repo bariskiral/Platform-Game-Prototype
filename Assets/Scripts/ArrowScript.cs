@@ -44,9 +44,10 @@ public class ArrowScript : MonoBehaviour
 
         if (col.gameObject.CompareTag("Enemy"))
         {
-            playerHealth.GainHealth(arrowDamage);
-            col.gameObject.GetComponent<EnemyScript>().EnemyTakeDamage(arrowDamage);
             Destroy(gameObject);
+            playerHealth.GainHealth(arrowDamage);
+            col.gameObject.GetComponent<EnemyController>().EnemyTakeDamage(arrowDamage);
+            
         }
     }
 

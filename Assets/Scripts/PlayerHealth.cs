@@ -50,7 +50,7 @@ public class PlayerHealth : MonoBehaviour
     {
         player.GetComponent<Animation>().Stop("Damaged");
         anim.SetBool("isDead", true);
-        rb.velocity = new Vector2(0, 0);
+        rb.velocity = Vector2.zero;
         player.GetComponent<PlayerController>().enabled = false;
     }
 

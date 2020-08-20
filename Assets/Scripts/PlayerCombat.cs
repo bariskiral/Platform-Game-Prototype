@@ -80,7 +80,7 @@ public class PlayerCombat : MonoBehaviour
 
         foreach (Collider2D enemy in hitEnemies)
         {
-            enemy.GetComponent<EnemyScript>().EnemyTakeDamage(swordDamage);
+            enemy.GetComponent<EnemyController>().EnemyTakeDamage(swordDamage);
             playerHealth.GainHealth(swordDamage);
         }
     }
