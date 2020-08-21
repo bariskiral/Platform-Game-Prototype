@@ -41,6 +41,12 @@ public class EnemyController : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
+        Patrol();
+        //TODO: FollowPlayer();
+    }
+
+    protected virtual void Patrol()
+    {
         hittingWall = Physics2D.OverlapCircle(wallCheck.position, checkRadius, whatIsObstacle);
         notAtEdge = Physics2D.OverlapCircle(edgeCheck.position, checkRadius, whatIsObstacle);
 
@@ -60,7 +66,12 @@ public class EnemyController : MonoBehaviour
             transform.eulerAngles = new Vector2(0, 0);
         }
 
-        enemyAnim.SetFloat("Speed", Math.Abs(enemySpeed));
+        enemyAnim.SetFloat("Speed", enemySpeed);
+    }
+
+    protected virtual void FollowPlayer()
+    {
+        //TODO
     }
 
     protected virtual void OnDrawGizmosSelected()
@@ -84,11 +95,6 @@ public class EnemyController : MonoBehaviour
                 currTime -= Time.deltaTime;
             }
         }
-    }
-
-    protected virtual void FollowPlayer()
-    {
-
     }
 
     public virtual void EnemyTakeDamage(float damage)

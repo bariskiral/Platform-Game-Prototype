@@ -4,49 +4,55 @@ using UnityEngine;
 
 public class RatScript : EnemyController
 {
-    private Vector2 moveDir;
-    private Vector2 movePerSec;
-    private float timePassed;
     private bool canRoam = true;
 
     [SerializeField] private float dirChangeTime = 2f;
-    
+    private float timeLeft;
+    private Vector2 movement;
+
     protected override void Start()
     {
         base.Start();
-        timePassed = 0f;
-        NewMoveVector();
+        timeLeft = 0f;
     }
 
     protected override void FixedUpdate()
     {
-        base.FixedUpdate();
         if (canRoam)
         {
             EnemyRoam();
         }
     }
 
-    private void NewMoveVector()
-    {
-        moveDir = new Vector2(Random.Range(-1.0f, 1.0f), 0).normalized;
-        movePerSec = moveDir * enemySpeed;
-    }
-
     private void EnemyRoam()
     {
-        if (Time.time - timePassed > dirChangeTime)
+        timeLeft -= Time.deltaTime;
+
+        if (timeLeft <= 0)
         {
-            timePassed = Time.time;         
+            movement = new Vector2(Random.Range(-1f, 1f), 0).normalized;
+            timeLeft += dirChangeTime;
         }
 
-        transform.position = new Vector2(transform.position.x + (movePerSec.x * Time.deltaTime),
-        transform.position.y + (movePerSec.y * Time.deltaTime));
-    }
+        hittingWall = Physics2D.OverlapCircle(wallCheck.position, checkRadius, whatIsObstacle);
+        notAtEdge = Physics2D.OverlapCircle(edgeCheck.position, checkRadius, whatIsObstacle);
 
-    protected override void Die()
-    {
-        canRoam = false;
-        base.Die();
+        if (hittingWall || !notAtEdge)
+        {
+            moveRight = !moveRight;
+        }
+
+        if (moveRight || movement.x > 0)
+        {
+            rb.velocity = new Vector2(-movement.x * enemySpeed, rb.velocity.y);
+            transform.eulerAngles = new Vector2(0, -180);
+        }
+        else
+        {
+            rb.velocity = new Vector2(movement.x * enemySpeed, rb.velocity.y);
+            transform.eulerAngles = new Vector2(0, 0);
+        }
+
+        enemyAnim.SetFloat("Speed", enemySpeed);
     }
 }
