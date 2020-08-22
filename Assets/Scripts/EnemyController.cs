@@ -13,13 +13,14 @@ public class EnemyController : MonoBehaviour
     [SerializeField] protected float enemyHealth = 10f;
     [SerializeField] protected float enemySpeed = 2f;
     [SerializeField] protected float enemyDamage = 5f;
-    [SerializeField] protected float waitTime = 2f;
+    [SerializeField] protected float patrolWaitTime = 2f;
     [SerializeField] protected float checkRadius;
     [SerializeField] protected bool moveRight;
 
     protected float currEnemyHealth;
     protected float currTime = 0f;
     protected float nextDmg = 0.5f;
+    protected float patrolPassedTime;
     protected bool hittingWall;
     protected bool notAtEdge;
 
@@ -37,12 +38,13 @@ public class EnemyController : MonoBehaviour
     protected virtual void Start()
     {
         currEnemyHealth = enemyHealth;
+        patrolPassedTime = patrolWaitTime;
     }
 
     protected virtual void FixedUpdate()
     {
         Patrol();
-        //TODO: FollowPlayer();
+        //FollowPlayer();
     }
 
     protected virtual void Patrol()
@@ -52,7 +54,16 @@ public class EnemyController : MonoBehaviour
 
         if (hittingWall || !notAtEdge)
         {
+            rb.velocity = Vector2.zero;
+            enemyAnim.SetFloat("Speed", 0);
+
+            if (patrolPassedTime > 0)
+            {
+                patrolPassedTime -= Time.deltaTime;
+                return;
+            }
             moveRight = !moveRight;
+            patrolPassedTime = patrolWaitTime;
         }
 
         if (moveRight)
@@ -63,7 +74,7 @@ public class EnemyController : MonoBehaviour
         else
         {
             rb.velocity = new Vector2(-enemySpeed, rb.velocity.y);
-            transform.eulerAngles = new Vector2(0, 0);
+            transform.eulerAngles = new Vector2(0, 0);  
         }
 
         enemyAnim.SetFloat("Speed", enemySpeed);
@@ -111,7 +122,6 @@ public class EnemyController : MonoBehaviour
     protected virtual void Die()
     {
         enemyAnim.SetBool("isDead", true);
-        //TODO: Make enemies explode?
         enemySpeed = 0;
         gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
         GetComponent<Collider2D>().enabled = false;

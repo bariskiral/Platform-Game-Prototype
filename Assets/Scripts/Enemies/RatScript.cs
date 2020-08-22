@@ -42,14 +42,14 @@ public class RatScript : EnemyController
             moveRight = !moveRight;
         }
 
-        if (moveRight || movement.x > 0)
+        if (moveRight)
         {
-            rb.velocity = new Vector2(-movement.x * enemySpeed, rb.velocity.y);
+            rb.velocity = new Vector2(movement.x * enemySpeed, rb.velocity.y);
             transform.eulerAngles = new Vector2(0, -180);
         }
         else
         {
-            rb.velocity = new Vector2(movement.x * enemySpeed, rb.velocity.y);
+            rb.velocity = new Vector2(-movement.x * enemySpeed, rb.velocity.y);
             transform.eulerAngles = new Vector2(0, 0);
         }
 
