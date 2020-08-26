@@ -15,18 +15,17 @@ public class EnemyController : MonoBehaviour
     [SerializeField] protected float enemySpeed = 2f;
     [SerializeField] protected float enemyDamage = 5f;
     [SerializeField] protected float patrolWaitTime = 2f;
-    [SerializeField] protected float agroRange = 5f;
+    [SerializeField] protected float aggroRange = 5f;
+    [SerializeField] protected float attackRange = 1f;
     [SerializeField] protected float checkRadius;
     [SerializeField] protected bool moveRight;
 
     protected float currEnemyHealth;
+    protected float patrolPassedTime;
     protected float currTime = 0f;
     protected float nextDmg = 0.5f;
-    protected float patrolPassedTime;
-    protected float castDistance;
     protected bool hittingWall;
     protected bool notAtEdge;
-    protected bool isAggro;
 
     protected GameObject player;
     protected PlayerHealth playerHealth;
@@ -49,7 +48,7 @@ public class EnemyController : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        if (!CanSeePlayer(agroRange))
+        if (!CanSeePlayer(aggroRange))
         {
             Patrol();
         }
@@ -96,39 +95,34 @@ public class EnemyController : MonoBehaviour
     protected virtual bool CanSeePlayer(float distance)
     {
         bool seesPlayer = false;
-        castDistance = distance;
 
-        if (moveRight)
-        {
-            castDistance = -distance;
-        }
+        RaycastHit2D hit = Physics2D.Linecast(castPoint.position, target.position, whatIsObstacle);
 
-        Vector2 endPos = castPoint.position + Vector3.left * castDistance;
-        RaycastHit2D hit = Physics2D.Linecast(castPoint.position, endPos, whatIsObstacle);
-
-        if (hit.collider != null)
+        if (hit.distance <= distance)
         {
             if (hit.collider.gameObject.CompareTag("Player"))
             {
                 seesPlayer = true;
+                if (hit.distance <= attackRange)
+                {
+                    Attack();
+                }
             }
             else
             {
                 seesPlayer = false;
             }
-
-            Debug.DrawLine(castPoint.position, hit.point, Color.yellow);
-        }
-        else
-        {
-            Debug.DrawLine(castPoint.position, endPos, Color.blue);
+            Debug.DrawLine(castPoint.position, hit.point, Color.red);
         }
 
         return seesPlayer;
+
     }
 
     protected virtual void FollowPlayer()
     {
+        //TODO1: Little delay on turn.
+        //TODO2: Edge Check.
         if (transform.position.x < target.position.x)
         {
             rb.velocity = new Vector2(enemySpeed * 1.5f, rb.velocity.y);
@@ -141,14 +135,22 @@ public class EnemyController : MonoBehaviour
             transform.eulerAngles = new Vector2(0, 0);
             moveRight = false;
         }
-        
+    }
+
+    protected virtual void Attack()
+    {
+        //Different attack for every type of enemy.
     }
 
     protected virtual void OnDrawGizmosSelected()
     {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(wallCheck.position, checkRadius); //Wall Check
+        Gizmos.DrawWireSphere(edgeCheck.position, checkRadius); //Edge Check
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(castPoint.position, aggroRange);  //Aggro Range
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(wallCheck.position, checkRadius);
-        Gizmos.DrawWireSphere(edgeCheck.position, checkRadius);
+        Gizmos.DrawWireSphere(castPoint.position, attackRange); //Attack Range
     }
 
     protected virtual void OnCollisionStay2D(Collision2D col)
@@ -157,6 +159,7 @@ public class EnemyController : MonoBehaviour
         {
             if (currTime <= 0)
             {
+                //TODO: Little knockback to player.
                 playerHealth.TakeDamage(enemyDamage);
                 currTime = nextDmg;
             }
@@ -169,6 +172,8 @@ public class EnemyController : MonoBehaviour
 
     public virtual void EnemyTakeDamage(float damage)
     {
+
+        //TODO: Little knockback to enemy.
         FollowPlayer();
         currEnemyHealth -= damage;
         enemyAnim.SetTrigger("Damage");
