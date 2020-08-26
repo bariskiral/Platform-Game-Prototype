@@ -8,12 +8,14 @@ public class EnemyController : MonoBehaviour
     [SerializeField] protected Animator enemyAnim;
     [SerializeField] protected Transform wallCheck;
     [SerializeField] protected Transform edgeCheck;
+    [SerializeField] protected Transform castPoint;
     [SerializeField] protected LayerMask whatIsObstacle;
 
     [SerializeField] protected float enemyHealth = 10f;
     [SerializeField] protected float enemySpeed = 2f;
     [SerializeField] protected float enemyDamage = 5f;
     [SerializeField] protected float patrolWaitTime = 2f;
+    [SerializeField] protected float agroRange = 5f;
     [SerializeField] protected float checkRadius;
     [SerializeField] protected bool moveRight;
 
@@ -21,18 +23,22 @@ public class EnemyController : MonoBehaviour
     protected float currTime = 0f;
     protected float nextDmg = 0.5f;
     protected float patrolPassedTime;
+    protected float castDistance;
     protected bool hittingWall;
     protected bool notAtEdge;
+    protected bool isAggro;
 
     protected GameObject player;
     protected PlayerHealth playerHealth;
     protected Rigidbody2D rb;
+    protected Transform target;
 
     protected virtual void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
         rb = GetComponent<Rigidbody2D>();
+        target = player.GetComponent<Transform>();
     }
 
     protected virtual void Start()
@@ -43,8 +49,15 @@ public class EnemyController : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        Patrol();
-        //FollowPlayer();
+        if (!CanSeePlayer(agroRange))
+        {
+            Patrol();
+        }
+
+        else
+        {
+            FollowPlayer();
+        }
     }
 
     protected virtual void Patrol()
@@ -74,15 +87,61 @@ public class EnemyController : MonoBehaviour
         else
         {
             rb.velocity = new Vector2(-enemySpeed, rb.velocity.y);
-            transform.eulerAngles = new Vector2(0, 0);  
+            transform.eulerAngles = new Vector2(0, 0);
         }
 
         enemyAnim.SetFloat("Speed", enemySpeed);
     }
 
+    protected virtual bool CanSeePlayer(float distance)
+    {
+        bool seesPlayer = false;
+        castDistance = distance;
+
+        if (moveRight)
+        {
+            castDistance = -distance;
+        }
+
+        Vector2 endPos = castPoint.position + Vector3.left * castDistance;
+        RaycastHit2D hit = Physics2D.Linecast(castPoint.position, endPos, whatIsObstacle);
+
+        if (hit.collider != null)
+        {
+            if (hit.collider.gameObject.CompareTag("Player"))
+            {
+                seesPlayer = true;
+            }
+            else
+            {
+                seesPlayer = false;
+            }
+
+            Debug.DrawLine(castPoint.position, hit.point, Color.yellow);
+        }
+        else
+        {
+            Debug.DrawLine(castPoint.position, endPos, Color.blue);
+        }
+
+        return seesPlayer;
+    }
+
     protected virtual void FollowPlayer()
     {
-        //TODO
+        if (transform.position.x < target.position.x)
+        {
+            rb.velocity = new Vector2(enemySpeed * 1.5f, rb.velocity.y);
+            transform.eulerAngles = new Vector2(0, -180);
+            moveRight = true;
+        }
+        else
+        {
+            rb.velocity = new Vector2(-enemySpeed * 1.5f, rb.velocity.y);
+            transform.eulerAngles = new Vector2(0, 0);
+            moveRight = false;
+        }
+        
     }
 
     protected virtual void OnDrawGizmosSelected()
@@ -110,6 +169,7 @@ public class EnemyController : MonoBehaviour
 
     public virtual void EnemyTakeDamage(float damage)
     {
+        FollowPlayer();
         currEnemyHealth -= damage;
         enemyAnim.SetTrigger("Damage");
 
