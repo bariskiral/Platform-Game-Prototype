@@ -67,7 +67,6 @@ public class PlayerController : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groudCheck.position, checkRadius, ground);
         RaycastHit2D ladderInfo = Physics2D.Raycast(transform.position, Vector2.up, 5, whatIsLadder);
 
-        //Sideways movement
         Vector2 moveInput = inputControls.Player.Move.ReadValue<Vector2>();
         rb.velocity = new Vector2(moveInput.x * moveSpeed, rb.velocity.y);
 
