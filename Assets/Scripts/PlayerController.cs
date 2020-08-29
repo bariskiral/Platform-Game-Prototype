@@ -12,10 +12,12 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
 
     private bool isGrounded;
+    private bool isClimbing;
     private int extraJumps;
 
     [SerializeField] private Animator anim;
     [SerializeField] private LayerMask ground;
+    [SerializeField] private LayerMask whatIsLadder;
     [SerializeField] private Transform groudCheck;
 
     [SerializeField] private int jumpCount;
@@ -61,14 +63,41 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         #region Movement
-        //Are we collide with ground?
+        //Are we collide with ground or ladder?
         isGrounded = Physics2D.OverlapCircle(groudCheck.position, checkRadius, ground);
+        RaycastHit2D ladderInfo = Physics2D.Raycast(transform.position, Vector2.up, 5, whatIsLadder);
 
         //Sideways movement
         Vector2 moveInput = inputControls.Player.Move.ReadValue<Vector2>();
         rb.velocity = new Vector2(moveInput.x * moveSpeed, rb.velocity.y);
 
         anim.SetFloat("Speed", Math.Abs(moveInput.x));
+
+        //Ladder movement
+        if (ladderInfo.collider != null)
+        {
+            if (moveInput.y != 0)
+            {
+                isClimbing = true;
+            }
+        }
+        else
+        {
+            if (moveInput.x != 0)
+            {
+                isClimbing = false;               
+            }
+        }
+
+        if (isClimbing && ladderInfo.collider != null)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, moveInput.y * moveSpeed);
+            rb.gravityScale = 0;
+        }
+        else
+        {
+            rb.gravityScale = 2f;
+        }
 
         //Character flip
         if (moveInput.x < 0)
@@ -79,7 +108,6 @@ public class PlayerController : MonoBehaviour
         {
             transform.eulerAngles = new Vector2(0, 0);
         }
-
 
         //Gravity changer for speed up jumping and falling
         if (rb.velocity.y < 0)

@@ -66,7 +66,7 @@ public class EnemyController : MonoBehaviour
 
         if (hittingWall || !notAtEdge)
         {
-            rb.velocity = Vector2.zero;
+            rb.velocity = new Vector2(0, rb.velocity.y);
             enemyAnim.SetFloat("Speed", 0);
 
             if (patrolPassedTime > 0)
@@ -122,18 +122,27 @@ public class EnemyController : MonoBehaviour
     protected virtual void FollowPlayer()
     {
         //TODO1: Little delay on turn.
-        //TODO2: Edge Check.
-        if (transform.position.x < target.position.x)
+        notAtEdge = Physics2D.OverlapCircle(edgeCheck.position, checkRadius, whatIsObstacle);
+
+        if (notAtEdge)
         {
-            rb.velocity = new Vector2(enemySpeed * 1.5f, rb.velocity.y);
-            transform.eulerAngles = new Vector2(0, -180);
-            moveRight = true;
+            if (transform.position.x < target.position.x)
+            {
+                rb.velocity = new Vector2(enemySpeed * 1.5f, rb.velocity.y);
+                transform.eulerAngles = new Vector2(0, -180);
+                moveRight = true;
+            }
+            else
+            {
+                rb.velocity = new Vector2(-enemySpeed * 1.5f, rb.velocity.y);
+                transform.eulerAngles = new Vector2(0, 0);
+                moveRight = false;
+            }
         }
         else
         {
-            rb.velocity = new Vector2(-enemySpeed * 1.5f, rb.velocity.y);
-            transform.eulerAngles = new Vector2(0, 0);
-            moveRight = false;
+            rb.velocity = new Vector2(0, rb.velocity.y);
+            enemyAnim.SetFloat("Speed", 0);
         }
     }
 
@@ -172,11 +181,11 @@ public class EnemyController : MonoBehaviour
 
     public virtual void EnemyTakeDamage(float damage)
     {
-
-        //TODO: Little knockback to enemy.
-        FollowPlayer();
+        //TODO: Little knockback and stagger effect to enemy.
+        //$ If enemy takes damage from traps, it will still follow player. Fixable?
         currEnemyHealth -= damage;
         enemyAnim.SetTrigger("Damage");
+        FollowPlayer();
 
         if (currEnemyHealth <= 0)
         {
