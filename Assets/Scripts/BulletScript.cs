@@ -4,24 +4,16 @@ using UnityEngine;
 
 public class BulletScript : MonoBehaviour
 {
-
     private GameObject player;
     private PlayerHealth playerHealth;
-    private Rigidbody2D rb;
 
-    [SerializeField] private float bulletDamage = 1;
+    [SerializeField] private float bulletDamage = 1f;
+    [SerializeField] private float destroyTime = 5f;
 
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
-        rb = GetComponent<Rigidbody2D>();
-    }
-
-    private void Start()
-    {
-        Vector2 dir = (player.transform.position - transform.position).normalized;
-        rb.AddForce(dir*1000);
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -37,7 +29,7 @@ public class BulletScript : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject, 5);
+            Destroy(gameObject, destroyTime);
         }
     }
 }

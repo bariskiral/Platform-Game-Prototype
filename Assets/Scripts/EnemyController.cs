@@ -13,6 +13,7 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField] protected float enemyHealth = 10f;
     [SerializeField] protected float enemySpeed = 2f;
+    [SerializeField] protected float aggroSpeed = 3f;
     [SerializeField] protected float enemyDamage = 5f;
     [SerializeField] protected float patrolWaitTime = 2f;
     [SerializeField] protected float aggroRange = 5f;
@@ -121,26 +122,27 @@ public class EnemyController : MonoBehaviour
 
     protected virtual void FollowPlayer()
     {
-        //TODO1: Little delay on turn.
         notAtEdge = Physics2D.OverlapCircle(edgeCheck.position, checkRadius, whatIsObstacle);
 
         if (notAtEdge)
         {
             if (transform.position.x < target.position.x)
             {
-                rb.velocity = new Vector2(enemySpeed * 1.5f, rb.velocity.y);
+                rb.velocity = new Vector2(aggroSpeed, rb.velocity.y);
                 transform.eulerAngles = new Vector2(0, -180);
                 moveRight = true;
             }
             else
             {
-                rb.velocity = new Vector2(-enemySpeed * 1.5f, rb.velocity.y);
+                rb.velocity = new Vector2(-aggroSpeed, rb.velocity.y);
                 transform.eulerAngles = new Vector2(0, 0);
                 moveRight = false;
             }
+            enemyAnim.SetFloat("Speed", enemySpeed);
         }
         else
         {
+            //FIX: If player comes from back when enemy is waiting in the edge, it will stop until player leaves range.
             rb.velocity = new Vector2(0, rb.velocity.y);
             enemyAnim.SetFloat("Speed", 0);
         }
@@ -182,7 +184,7 @@ public class EnemyController : MonoBehaviour
     public virtual void EnemyTakeDamage(float damage)
     {
         //TODO: Little knockback and stagger effect to enemy.
-        //$ If enemy takes damage from traps, it will still follow player. Fixable?
+        //FIX: If enemy takes damage from traps, it will still follow player.
         currEnemyHealth -= damage;
         enemyAnim.SetTrigger("Damage");
         FollowPlayer();

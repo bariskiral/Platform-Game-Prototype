@@ -13,7 +13,6 @@ public class ObjectRoute : MonoBehaviour
 
     private bool getDistance = true;
     private bool backAndForth = true;
-
     private int distanceCount;
 
     [SerializeField] private float speed = 5f;
@@ -37,6 +36,7 @@ public class ObjectRoute : MonoBehaviour
 
     void GoToNodes()
     {
+        //TODO: Add a wait time when it reach to the node.
         if (getDistance)
         {
             distance = (nodes[distanceCount].transform.position - transform.position).normalized;
@@ -84,7 +84,6 @@ public class ObjectRoute : MonoBehaviour
         }
     }
 #endif
-
 }
 
 #if UNITY_EDITOR

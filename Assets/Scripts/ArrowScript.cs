@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class ArrowScript : MonoBehaviour
 {
-    private float destroyTime = 5f;
-
     [SerializeField] private float arrowDamage = 1f;
+    [SerializeField] private float destroyTime = 5f;
+
+    private bool fadeOut;
 
     private GameObject player;
     private PlayerHealth playerHealth;
@@ -21,9 +21,10 @@ public class ArrowScript : MonoBehaviour
 
     void Update()
     {
-        //Fade out
-        GetComponent<SpriteRenderer>().color -= new Color(0, 0, 0, 0.002f);
-        Destroy(gameObject, destroyTime * 2);
+        if (fadeOut)
+        {
+            GetComponent<SpriteRenderer>().color -= new Color(0, 0, 0, 0.002f);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D col)
@@ -38,16 +39,21 @@ public class ArrowScript : MonoBehaviour
 
             sharedParent.transform.parent = col.gameObject.transform;
             transform.parent = sharedParent.transform;
-
+            fadeOut = true;
             Destroy(gameObject, destroyTime);
         }
 
-        if (col.gameObject.CompareTag("Enemy"))
+        else if (col.gameObject.CompareTag("Enemy"))
         {
             Destroy(gameObject);
             playerHealth.GainHealth(arrowDamage);
             col.gameObject.GetComponent<EnemyController>().EnemyTakeDamage(arrowDamage);
             
+        }
+
+        else
+        {
+            Destroy(gameObject, destroyTime * 2);
         }
     }
 

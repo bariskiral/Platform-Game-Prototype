@@ -8,21 +8,33 @@ public class TurretScrpit : MonoBehaviour
     [SerializeField] private GameObject bullet;
     [SerializeField] private Transform castPoint;
     [SerializeField] private Transform target;
+    [SerializeField] private Transform rotatingObject;
     [SerializeField] private LayerMask whatIsObstacle;
-    [SerializeField] private float attackRange;
-    [SerializeField] private float aggroRange;
+
+    [SerializeField] private float shotRange;
     [SerializeField] private float shotDelay;
+    [SerializeField] private float shotForce = 500f;
+
+    private GameObject player;
     private float shotTime;
 
-    private void Start()
+    private void Awake()
     {
-        
+        player = GameObject.FindGameObjectWithTag("Player");
     }
+
     void Update()
     {
-        if (CanSeePlayer(aggroRange))
+        if (CanSeePlayer(shotRange))
         {
+            //TODO: Aggro anim.
             Shoot();
+            Rotate();
+        }
+        else
+        {
+            //TODO: Idle anim.
+            rotatingObject.rotation = Quaternion.Euler(0, 0, 0);
         }
     }
 
@@ -54,8 +66,17 @@ public class TurretScrpit : MonoBehaviour
         shotTime += Time.deltaTime;
         if (shotTime >= shotDelay)
         {
-            Instantiate(bullet, transform.position, Quaternion.identity);
+            GameObject bulletClone = Instantiate(bullet, castPoint.position, Quaternion.identity);
+            Vector2 dir = (player.transform.position - transform.position).normalized;
+            bulletClone.GetComponent<Rigidbody2D>().AddForce(dir * shotForce);
             shotTime = 0;
         }
+    }
+
+    private void Rotate()
+    {
+        Vector2 dir = (player.transform.position - transform.position).normalized;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        rotatingObject.rotation = Quaternion.Euler(Vector3.forward * angle);
     }
 }
