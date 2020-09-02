@@ -18,15 +18,22 @@ public class EnemyController : MonoBehaviour
     [SerializeField] protected float patrolWaitTime = 2f;
     [SerializeField] protected float aggroRange = 5f;
     [SerializeField] protected float attackRange = 1f;
+    [SerializeField] protected float nextDmg = 0.5f;
     [SerializeField] protected float checkRadius;
+    [SerializeField] protected float dissappearTime = 5f;
+    [SerializeField] protected float knockPower = 200000f;
+    [SerializeField] protected float stunTime = 0.5f;
     [SerializeField] protected bool moveRight;
-
+    [SerializeField] protected bool touchDamage;
+    
     protected float currEnemyHealth;
-    protected float patrolPassedTime;
+    protected float _patrolWaitTime;
     protected float currTime = 0f;
-    protected float nextDmg = 0.5f;
+    protected float _stunTime;
     protected bool hittingWall;
     protected bool notAtEdge;
+    protected bool notDead = true;
+    protected bool stunned;
 
     protected GameObject player;
     protected PlayerHealth playerHealth;
@@ -44,12 +51,13 @@ public class EnemyController : MonoBehaviour
     protected virtual void Start()
     {
         currEnemyHealth = enemyHealth;
-        patrolPassedTime = patrolWaitTime;
+        _patrolWaitTime = patrolWaitTime;
+        _stunTime = stunTime;
     }
 
     protected virtual void FixedUpdate()
     {
-        if (!CanSeePlayer(aggroRange))
+        if (!CanSeePlayer(aggroRange) && notDead)
         {
             Patrol();
         }
@@ -58,6 +66,19 @@ public class EnemyController : MonoBehaviour
         {
             FollowPlayer();
         }
+
+        if (stunned)
+        {
+            rb.velocity = Vector2.zero;
+            _stunTime -= Time.deltaTime;
+            if (_stunTime <= 0)
+            {
+                stunned = false;
+                _stunTime = stunTime;
+            }
+        }
+
+        enemyAnim.SetFloat("Speed", Math.Abs(rb.velocity.x));
     }
 
     protected virtual void Patrol()
@@ -68,15 +89,14 @@ public class EnemyController : MonoBehaviour
         if (hittingWall || !notAtEdge)
         {
             rb.velocity = new Vector2(0, rb.velocity.y);
-            enemyAnim.SetFloat("Speed", 0);
 
-            if (patrolPassedTime > 0)
+            if (_patrolWaitTime > 0)
             {
-                patrolPassedTime -= Time.deltaTime;
+                _patrolWaitTime -= Time.deltaTime;
                 return;
             }
             moveRight = !moveRight;
-            patrolPassedTime = patrolWaitTime;
+            _patrolWaitTime = patrolWaitTime;
         }
 
         if (moveRight)
@@ -89,8 +109,6 @@ public class EnemyController : MonoBehaviour
             rb.velocity = new Vector2(-enemySpeed, rb.velocity.y);
             transform.eulerAngles = new Vector2(0, 0);
         }
-
-        enemyAnim.SetFloat("Speed", enemySpeed);
     }
 
     protected virtual bool CanSeePlayer(float distance)
@@ -124,7 +142,7 @@ public class EnemyController : MonoBehaviour
     {
         notAtEdge = Physics2D.OverlapCircle(edgeCheck.position, checkRadius, whatIsObstacle);
 
-        if (notAtEdge)
+        if (notAtEdge && notDead)
         {
             if (transform.position.x < target.position.x)
             {
@@ -138,13 +156,11 @@ public class EnemyController : MonoBehaviour
                 transform.eulerAngles = new Vector2(0, 0);
                 moveRight = false;
             }
-            enemyAnim.SetFloat("Speed", enemySpeed);
         }
         else
         {
             //FIX: If player comes from back when enemy is waiting in the edge, it will stop until player leaves range.
             rb.velocity = new Vector2(0, rb.velocity.y);
-            enemyAnim.SetFloat("Speed", 0);
         }
     }
 
@@ -156,37 +172,40 @@ public class EnemyController : MonoBehaviour
     protected virtual void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(wallCheck.position, checkRadius); //Wall Check
-        Gizmos.DrawWireSphere(edgeCheck.position, checkRadius); //Edge Check
+        Gizmos.DrawWireSphere(wallCheck.position, checkRadius);
+        Gizmos.DrawWireSphere(edgeCheck.position, checkRadius);
         Gizmos.color = Color.magenta;
-        Gizmos.DrawWireSphere(castPoint.position, aggroRange);  //Aggro Range
+        Gizmos.DrawWireSphere(castPoint.position, aggroRange);
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(castPoint.position, attackRange); //Attack Range
+        Gizmos.DrawWireSphere(castPoint.position, attackRange);
     }
 
     protected virtual void OnCollisionStay2D(Collision2D col)
     {
-        if (col.gameObject.CompareTag("Player"))
+        if (touchDamage)
         {
-            if (currTime <= 0)
+            if (col.gameObject.CompareTag("Player"))
             {
-                //TODO: Little knockback to player.
-                playerHealth.TakeDamage(enemyDamage);
-                currTime = nextDmg;
-            }
-            else
-            {
-                currTime -= Time.deltaTime;
+                if (currTime <= 0)
+                {
+                    playerHealth.TakeDamage(enemyDamage);
+                    currTime = nextDmg;
+                }
+                else
+                {
+                    currTime -= Time.deltaTime;
+                }
             }
         }
     }
 
     public virtual void EnemyTakeDamage(float damage)
     {
-        //TODO: Little knockback and stagger effect to enemy.
-        //FIX: If enemy takes damage from traps, it will still follow player.
+        rb.AddForce(transform.right * knockPower);
         currEnemyHealth -= damage;
         enemyAnim.SetTrigger("Damage");
+        stunned = true;
+        //FIX: If enemy takes damage from traps, it will still follow player.
         FollowPlayer();
 
         if (currEnemyHealth <= 0)
@@ -197,10 +216,10 @@ public class EnemyController : MonoBehaviour
 
     protected virtual void Die()
     {
+        notDead = false;
         enemyAnim.SetBool("isDead", true);
-        enemySpeed = 0;
         gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
         GetComponent<Collider2D>().enabled = false;
-        Destroy(gameObject, 5f);
+        Destroy(gameObject, dissappearTime);
     }
 }

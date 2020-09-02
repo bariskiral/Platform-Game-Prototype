@@ -44,8 +44,6 @@ public class VerticalPlatform : MonoBehaviour
         }
     }
 
-    //Move with platform on collision
-
     private void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Player"))

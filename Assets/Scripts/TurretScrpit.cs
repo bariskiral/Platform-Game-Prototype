@@ -67,7 +67,7 @@ public class TurretScrpit : MonoBehaviour
         if (shotTime >= shotDelay)
         {
             GameObject bulletClone = Instantiate(bullet, castPoint.position, Quaternion.identity);
-            Vector2 dir = (player.transform.position - transform.position).normalized;
+            Vector2 dir = (player.transform.position - castPoint.position).normalized;
             bulletClone.GetComponent<Rigidbody2D>().AddForce(dir * shotForce);
             shotTime = 0;
         }
@@ -75,7 +75,7 @@ public class TurretScrpit : MonoBehaviour
 
     private void Rotate()
     {
-        Vector2 dir = (player.transform.position - transform.position).normalized;
+        Vector2 dir = (player.transform.position - rotatingObject.position).normalized;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         rotatingObject.rotation = Quaternion.Euler(Vector3.forward * angle);
     }

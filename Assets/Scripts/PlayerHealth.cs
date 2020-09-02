@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] private float currHealth;
+    [SerializeField] private float currHealth = 1f;
+    [SerializeField] private float knockPower = 500f;
+    [SerializeField] private float knockUpDiv = 2f;
     [SerializeField] private TextMeshProUGUI healthText;
 
     private GameObject player;
@@ -33,8 +35,11 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(float dmgAmount)
     {
+        rb.AddForce(transform.right * -knockPower);
+        rb.AddForce(transform.up * knockPower / knockUpDiv);
         currHealth -= dmgAmount;
         player.GetComponent<Animation>().Play("Damaged");
+
         if (currHealth <= 0)
         {
             Died();

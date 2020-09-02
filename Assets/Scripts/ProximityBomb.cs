@@ -5,19 +5,17 @@ using UnityEngine;
 public class ProximityBomb : MonoBehaviour
 {
     [SerializeField] private float timer;
-    [SerializeField] private float radius;
+    [SerializeField] private float expRadius;
     [SerializeField] private float damage;
+    [SerializeField] private bool canDamageEnemy = true;
 
     private float countdown;
     private bool hasExploded;
     private bool trigger;
-    private CircleCollider2D bombCollider;
 
     void Start()
     {
-        bombCollider = GetComponent<CircleCollider2D>();
         countdown = timer;
-        bombCollider.radius = radius;
     }
 
     void Update()
@@ -40,15 +38,16 @@ public class ProximityBomb : MonoBehaviour
         }
     }
 
+    //TODO: Explosion effect.
     private void Explode()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, radius);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, expRadius);
         foreach (Collider2D nearbyObjects in colliders)
         {
             EnemyController enemy = nearbyObjects.GetComponent<EnemyController>();
             PlayerHealth player = nearbyObjects.GetComponent<PlayerHealth>();
 
-            if (enemy != null)
+            if (enemy != null && canDamageEnemy)
             {
                 enemy.EnemyTakeDamage(damage);
             }
@@ -64,6 +63,6 @@ public class ProximityBomb : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, radius);
+        Gizmos.DrawWireSphere(transform.position, expRadius);
     }
 }

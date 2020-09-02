@@ -7,7 +7,6 @@ using UnityEditor;
 
 public class ObjectRoute : MonoBehaviour
 {
-
     private GameObject[] nodes;
     private Vector3 distance;
 

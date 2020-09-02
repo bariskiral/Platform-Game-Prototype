@@ -7,7 +7,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
     private InputControls inputControls;
     private Rigidbody2D rb;
 

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class TouchDamage : MonoBehaviour
 {
-
     private GameObject player;
     private PlayerHealth playerHealth;
 

@@ -400,7 +400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currTime: 0
-  nextDmg: 0.5
+  nextDmg: 2
   damageValue: 5
   canDamageEnemy: 0
 --- !u!61 &68500339
@@ -486,7 +486,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.3, z: 0}
   m_LocalScale: {x: 4, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1338505911}
   m_Father: {fileID: 988840724}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3969,7 +3970,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 816331136}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.1200008, y: 3.3000002, z: -10}
+  m_LocalPosition: {x: -2.680001, y: 3.2000003, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 717101524}
@@ -4256,8 +4257,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 3
-  radius: 2
+  expRadius: 2
   damage: 50
+  canDamageEnemy: 0
 --- !u!212 &965980957
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4385,7 +4387,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bullet: {fileID: 9130177869353394020, guid: 0577406f46ab6e04a82532d404f3c5d3, type: 3}
-  castPoint: {fileID: 248264437}
+  castPoint: {fileID: 1338505911}
   target: {fileID: 1334609351}
   rotatingObject: {fileID: 248264437}
   whatIsObstacle:
@@ -5435,7 +5437,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1334609349}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.12, y: 2.3, z: 0}
+  m_LocalPosition: {x: -2.68, y: 2.2, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 1616167648}
@@ -5510,7 +5512,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 2
+  m_GravityScale: 1
   m_Material: {fileID: 6200000, guid: cf1f13c57b87e5a49a0d53ae8c621793, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -5547,7 +5549,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ed20da882c89c84faa191fb6b697c78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currHealth: 100
+  currHealth: 10000
+  knockPower: 500
+  knockUpDiv: 2
   healthText: {fileID: 1303968130}
 --- !u!111 &1334609357
 Animation:
@@ -5588,8 +5592,38 @@ MonoBehaviour:
   meleeWeapon: 0
   attackDelay: 0.35
   shotForce: 25
-  attackRange: 0.5
+  attackRange: 1
   swordDamage: 1
+--- !u!1 &1338505910
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1338505911}
+  m_Layer: 0
+  m_Name: CastPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1338505911
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1338505910}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.061, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 248264437}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1414211230
 GameObject:
   m_ObjectHideFlags: 0
@@ -7101,7 +7135,7 @@ Rigidbody2D:
   m_Material: {fileID: 6200000, guid: 03279f08aa27e594484338279cf04b33, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!212 &2045893890
 SpriteRenderer:
@@ -7194,11 +7228,16 @@ MonoBehaviour:
   enemySpeed: 2
   aggroSpeed: 3
   enemyDamage: 5
-  patrolWaitTime: 10
+  patrolWaitTime: 2
   aggroRange: 5
   attackRange: 1.5
+  nextDmg: 0.5
   checkRadius: 0.1
+  dissappearTime: 5
+  knockPower: 100000
+  stunTime: 1
   moveRight: 0
+  touchDamage: 1
 --- !u!95 &2045893893
 Animator:
   serializedVersion: 3
