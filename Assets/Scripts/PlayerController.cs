@@ -9,10 +9,16 @@ public class PlayerController : MonoBehaviour
 {
     private InputControls inputControls;
     private Rigidbody2D rb;
+    private Vector2 moveInput;
+    private RaycastHit2D ladderInfo;
 
+    private int extraJumps;
     private bool isGrounded;
     private bool isClimbing;
-    private int extraJumps;
+    private bool isDashing;
+    private float currDashTimer;
+    private float elapsedTime = 0f;
+    public static float playerDirection = 1f;
 
     [SerializeField] private Animator anim;
     [SerializeField] private LayerMask ground;
@@ -24,6 +30,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed = 8f;
     [SerializeField] private float gravityMultiplier = 1f;
     [SerializeField] private float jumpSpeed = 15f;
+    [SerializeField] private float dashPower;
+    [SerializeField] private float dashTimer;
+    [SerializeField] private float dashDelay;
 
     private void Awake()
     {
@@ -39,10 +48,50 @@ public class PlayerController : MonoBehaviour
         inputControls.Player.Dash.performed += ctx => Dash();
     }
 
-    private void Dash()
+    private void Update()
     {
-        anim.SetTrigger("Dash");
-        //TODO
+        CheckInput();   
+    }
+
+    private void FixedUpdate()
+    {
+        Movement();
+        LadderClimb();
+        Flip();
+        Dashing();
+        ImprovedGravity();
+        CheckSurroundings();
+    }
+
+    private void CheckInput()
+    {
+        moveInput = inputControls.Player.Move.ReadValue<Vector2>();
+    }
+
+    private void CheckSurroundings()
+    {
+        isGrounded = Physics2D.OverlapCircle(groudCheck.position, checkRadius, ground);
+        ladderInfo = Physics2D.Raycast(transform.position, Vector2.up, 5, whatIsLadder);
+    }
+
+    private void Movement()
+    {
+        rb.velocity = new Vector2(moveInput.x * moveSpeed, rb.velocity.y);
+        anim.SetFloat("Speed", Math.Abs(moveInput.x));
+    }
+
+    private void Flip()
+    {
+        if (moveInput.x < 0)
+        {
+            transform.eulerAngles = new Vector2(0, -180);
+            playerDirection = -1;
+        }
+        else if (moveInput.x > 0)
+        {
+            transform.eulerAngles = new Vector2(0, 0);
+            playerDirection = 1;
+        }
     }
 
     private void Jump()
@@ -59,19 +108,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
+    private void LadderClimb()
     {
-        #region Movement
-        //Are we collide with ground or ladder?
-        isGrounded = Physics2D.OverlapCircle(groudCheck.position, checkRadius, ground);
-        RaycastHit2D ladderInfo = Physics2D.Raycast(transform.position, Vector2.up, 5, whatIsLadder);
-
-        Vector2 moveInput = inputControls.Player.Move.ReadValue<Vector2>();
-        rb.velocity = new Vector2(moveInput.x * moveSpeed, rb.velocity.y);
-
-        anim.SetFloat("Speed", Math.Abs(moveInput.x));
-
-        //Ladder movement
         if (ladderInfo.collider != null)
         {
             if (moveInput.y != 0)
@@ -83,7 +121,7 @@ public class PlayerController : MonoBehaviour
         {
             if (moveInput.x != 0)
             {
-                isClimbing = false;               
+                isClimbing = false;
             }
         }
 
@@ -96,18 +134,36 @@ public class PlayerController : MonoBehaviour
         {
             rb.gravityScale = 2f;
         }
+    }
 
-        //Character flip
-        if (moveInput.x < 0)
+    private void Dash()
+    {
+        if (Time.time >= elapsedTime)
         {
-            transform.eulerAngles = new Vector2(0, -180);
+            anim.SetTrigger("Dash");
+            isDashing = true;
+            currDashTimer = dashTimer;
+            rb.velocity = Vector2.zero;
+            elapsedTime = Time.time + dashDelay;
         }
-        else if (moveInput.x > 0)
-        {
-            transform.eulerAngles = new Vector2(0, 0);
-        }
+    }
 
-        //Gravity changer for speed up jumping and falling
+    private void Dashing()
+    {
+        if (isDashing)
+        {
+            rb.velocity = new Vector2(dashPower * playerDirection, 0.0f);
+            currDashTimer -= Time.deltaTime;
+
+            if (currDashTimer <= 0)
+            {
+                isDashing = false;
+            }
+        }
+    }
+
+    private void ImprovedGravity()
+    {
         if (rb.velocity.y < 0)
         {
             rb.velocity += Vector2.up * Physics2D.gravity.y * (gravityMultiplier - 1) * Time.deltaTime;
@@ -116,7 +172,6 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity += Vector2.up * Physics2D.gravity.y * (gravityMultiplier + 1) * Time.deltaTime;
         }
-        #endregion
     }
 
     private void OnEnable()

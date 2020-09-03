@@ -20,9 +20,9 @@ public class @InputControls : IInputActionCollection, IDisposable
             ""actions"": [
                 {
                     ""name"": ""Move"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""514b52b5-0506-4082-b726-0cb911da2335"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
                 },
@@ -118,7 +118,7 @@ public class @InputControls : IInputActionCollection, IDisposable
                 {
                     ""name"": ""WASDA"",
                     ""id"": ""fc0815f0-e682-4c1b-bc30-1d8baabdb218"",
-                    ""path"": ""2DVector(mode=2)"",
+                    ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -173,7 +173,7 @@ public class @InputControls : IInputActionCollection, IDisposable
                 {
                     ""name"": ""Arrow Keys"",
                     ""id"": ""72b53617-e1a3-4ae1-a060-b61e0298b67c"",
-                    ""path"": ""2DVector(mode=2)"",
+                    ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -238,6 +238,17 @@ public class @InputControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""fe44b2e8-7faa-432c-8fc0-e7d7a8ae0878"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""65b658ff-2cc2-4e92-b7e0-919debaa53c6"",
                     ""path"": ""<Keyboard>/x"",
                     ""interactions"": """",
@@ -255,6 +266,17 @@ public class @InputControls : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""WeaponSwap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4b75741e-3c29-4da9-a576-ef92405991c0"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
