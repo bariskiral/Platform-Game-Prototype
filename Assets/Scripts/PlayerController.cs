@@ -11,25 +11,40 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 moveInput;
     private RaycastHit2D ladderInfo;
+    private RaycastHit2D wallInfo;
 
     private int extraJumps;
-    private bool isGrounded;
-    private bool isClimbing;
-    private bool isDashing;
     private float currDashTimer;
     private float elapsedTime = 0f;
     public static float playerDirection = 1f;
 
+    [Header("Drag Components")]
     [SerializeField] private Animator anim;
     [SerializeField] private LayerMask ground;
     [SerializeField] private LayerMask whatIsLadder;
     [SerializeField] private Transform groudCheck;
+    [SerializeField] private Transform wallCheck;
 
-    [SerializeField] private int jumpCount;
+    [Header("Behaviours")]
+    [SerializeField] private bool isGrounded;
+    [SerializeField] private bool isDashing;
+    [SerializeField] private bool isClimbing;
+    [SerializeField] private bool isWallSliding;
+
+    [Header("Movement")]
     [SerializeField] private float checkRadius;
     [SerializeField] private float moveSpeed = 8f;
-    [SerializeField] private float gravityMultiplier = 1f;
+    [SerializeField] private float rbGravityScale = 2f;
+    [SerializeField] private float wallCheckDis;
+    [SerializeField] private float wallSlideSpeed;
+
+    [Header("Jump")]
+    [SerializeField] private int jumpCount;
     [SerializeField] private float jumpSpeed = 15f;
+    [SerializeField] private float jumpDelay;
+    [SerializeField] private float gravityMultiplier = 1f;
+
+    [Header("Dash")]
     [SerializeField] private float dashPower;
     [SerializeField] private float dashTimer;
     [SerializeField] private float dashDelay;
@@ -61,23 +76,36 @@ public class PlayerController : MonoBehaviour
         Dashing();
         ImprovedGravity();
         CheckSurroundings();
+        CheckWallSliding();
     }
 
     private void CheckInput()
     {
         moveInput = inputControls.Player.Move.ReadValue<Vector2>();
+        Debug.Log(Math.Round(moveInput.x));
     }
 
     private void CheckSurroundings()
     {
         isGrounded = Physics2D.OverlapCircle(groudCheck.position, checkRadius, ground);
-        ladderInfo = Physics2D.Raycast(transform.position, Vector2.up, 5, whatIsLadder);
+        ladderInfo = Physics2D.Raycast(transform.position, Vector2.up, 2, whatIsLadder);
+        wallInfo = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDis, ground);
+
+        Debug.DrawRay(wallCheck.position, new Vector3(wallCheckDis * playerDirection, 0, 0), Color.white);
     }
 
     private void Movement()
     {
         rb.velocity = new Vector2(moveInput.x * moveSpeed, rb.velocity.y);
         anim.SetFloat("Speed", Math.Abs(moveInput.x));
+        
+        if (isWallSliding)
+        {
+            if (rb.velocity.y < -wallSlideSpeed)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, -wallSlideSpeed);
+            }
+        }
     }
 
     private void Flip()
@@ -96,33 +124,44 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        if (isGrounded)
+        if (Time.time >= elapsedTime)
         {
-            extraJumps = jumpCount;
-        }
+            if (isGrounded)
+            {
+                extraJumps = jumpCount;
+            }
 
-        if (extraJumps > 0)
+            if (extraJumps > 0)
+            {
+                rb.velocity = Vector2.up * jumpSpeed;
+                extraJumps--;
+            }
+
+            elapsedTime = Time.time + jumpDelay;
+        }
+    }
+
+    private void CheckWallSliding()
+    {
+        if (wallInfo && Math.Round(moveInput.x) == playerDirection && rb.velocity.y < 0 && !isClimbing)
         {
-            rb.velocity = Vector2.up * jumpSpeed;
-            extraJumps--;
+            isWallSliding = true;
+        }
+        else
+        {
+            isWallSliding = false;
         }
     }
 
     private void LadderClimb()
     {
-        if (ladderInfo.collider != null)
+        if (ladderInfo.collider != null )
         {
-            if (moveInput.y != 0)
-            {
-                isClimbing = true;
-            }
+            isClimbing = true;
         }
-        else
+        else if(moveInput.x != 0)
         {
-            if (moveInput.x != 0)
-            {
-                isClimbing = false;
-            }
+            isClimbing = false;
         }
 
         if (isClimbing && ladderInfo.collider != null)
@@ -132,7 +171,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            rb.gravityScale = 2f;
+            rb.gravityScale = rbGravityScale;
         }
     }
 
