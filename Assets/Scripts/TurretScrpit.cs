@@ -78,5 +78,7 @@ public class TurretScrpit : MonoBehaviour
         Vector2 dir = (player.transform.position - rotatingObject.position).normalized;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         rotatingObject.rotation = Quaternion.Euler(Vector3.forward * angle);
+
+        //rotatingObject.transform.up = dir;
     }
 }

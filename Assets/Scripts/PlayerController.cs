@@ -82,7 +82,6 @@ public class PlayerController : MonoBehaviour
     private void CheckInput()
     {
         moveInput = inputControls.Player.Move.ReadValue<Vector2>();
-        Debug.Log(Math.Round(moveInput.x));
     }
 
     private void CheckSurroundings()
@@ -146,6 +145,7 @@ public class PlayerController : MonoBehaviour
         if (wallInfo && Math.Round(moveInput.x) == playerDirection && rb.velocity.y < 0 && !isClimbing)
         {
             isWallSliding = true;
+            extraJumps = jumpCount;
         }
         else
         {
