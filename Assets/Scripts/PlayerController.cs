@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveInput;
     private RaycastHit2D ladderInfo;
     private RaycastHit2D wallInfo;
+    private RaycastHit2D ledgeInfo;
 
     private int extraJumps;
     private float currDashTimer;
@@ -24,6 +25,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask whatIsLadder;
     [SerializeField] private Transform groudCheck;
     [SerializeField] private Transform wallCheck;
+    [SerializeField] private Transform ledgeCheck;
 
     [Header("Behaviours")]
     [SerializeField] private bool isGrounded;
@@ -35,7 +37,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float checkRadius;
     [SerializeField] private float moveSpeed = 8f;
     [SerializeField] private float rbGravityScale = 2f;
-    [SerializeField] private float wallCheckDis;
+    [SerializeField] private float rayCheckDis;
     [SerializeField] private float wallSlideSpeed;
 
     [Header("Jump")]
@@ -77,6 +79,7 @@ public class PlayerController : MonoBehaviour
         ImprovedGravity();
         CheckSurroundings();
         CheckWallSliding();
+        CheckLedgeClimb();
     }
 
     private void CheckInput()
@@ -88,9 +91,11 @@ public class PlayerController : MonoBehaviour
     {
         isGrounded = Physics2D.OverlapCircle(groudCheck.position, checkRadius, ground);
         ladderInfo = Physics2D.Raycast(transform.position, Vector2.up, 2, whatIsLadder);
-        wallInfo = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDis, ground);
+        wallInfo = Physics2D.Raycast(wallCheck.position, transform.right, rayCheckDis, ground);
+        ledgeInfo = Physics2D.Raycast(ledgeCheck.position, transform.right, rayCheckDis, ground);
 
-        Debug.DrawRay(wallCheck.position, new Vector3(wallCheckDis * playerDirection, 0, 0), Color.white);
+        Debug.DrawRay(wallCheck.position, new Vector3(rayCheckDis * playerDirection, 0, 0), Color.white);
+        Debug.DrawRay(ledgeCheck.position, new Vector3(rayCheckDis * playerDirection, 0, 0), Color.white);
     }
 
     private void Movement()
@@ -151,6 +156,17 @@ public class PlayerController : MonoBehaviour
         {
             isWallSliding = false;
         }
+    }
+
+    private void CheckLedgeClimb()
+    {
+        if (wallInfo && !ledgeInfo && !isClimbing)
+        {
+            Vector2 playerCoord = transform.position;
+            Vector2 offsetCoord = new Vector2(1f * playerDirection, 1f);
+            //TODO: Player climb animation
+            transform.position = playerCoord + offsetCoord;
+        }       
     }
 
     private void LadderClimb()
