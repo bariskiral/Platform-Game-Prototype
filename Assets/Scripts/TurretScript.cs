@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurretScrpit : MonoBehaviour
+public class TurretScript : MonoBehaviour
 {
     [SerializeField] private GameObject bullet;
     [SerializeField] private Transform castPoint;
@@ -69,6 +69,16 @@ public class TurretScrpit : MonoBehaviour
             GameObject bulletClone = Instantiate(bullet, castPoint.position, Quaternion.identity);
             Vector2 dir = (player.transform.position - castPoint.position).normalized;
             bulletClone.GetComponent<Rigidbody2D>().AddForce(dir * shotForce);
+
+            if (transform.position.x < target.position.x)
+            {
+                bulletClone.GetComponent<BulletScript>().bulletDir = -1;
+            }
+            else
+            {
+                bulletClone.GetComponent<BulletScript>().bulletDir = 1;
+            }
+
             shotTime = 0;
         }
     }
@@ -76,9 +86,6 @@ public class TurretScrpit : MonoBehaviour
     private void Rotate()
     {
         Vector2 dir = (player.transform.position - rotatingObject.position).normalized;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        rotatingObject.rotation = Quaternion.Euler(Vector3.forward * angle);
-
-        //rotatingObject.transform.up = dir;
+        rotatingObject.transform.right = dir;
     }
 }

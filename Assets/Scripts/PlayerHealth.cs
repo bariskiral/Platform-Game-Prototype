@@ -35,8 +35,6 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(float dmgAmount)
     {
-        rb.AddForce(transform.right * -knockPower * PlayerController.playerDirection);
-        //rb.AddForce(transform.up * knockPower / knockUpDiv);
         currHealth -= dmgAmount;
         player.GetComponent<Animation>().Play("Damaged");
 

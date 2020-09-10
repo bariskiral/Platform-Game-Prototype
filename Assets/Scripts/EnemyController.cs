@@ -5,45 +5,62 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    [Header("Drag Components")]
     [SerializeField] protected Animator enemyAnim;
     [SerializeField] protected Transform wallCheck;
     [SerializeField] protected Transform edgeCheck;
     [SerializeField] protected Transform castPoint;
+    [SerializeField] protected Transform hitPoint;
     [SerializeField] protected LayerMask whatIsObstacle;
+    [SerializeField] protected LayerMask damageTarget;
 
-    [SerializeField] protected float enemyHealth = 10f;
-    [SerializeField] protected float enemySpeed = 2f;
-    [SerializeField] protected float aggroSpeed = 3f;
-    [SerializeField] protected float enemyDamage = 5f;
-    [SerializeField] protected float patrolWaitTime = 2f;
-    [SerializeField] protected float aggroRange = 5f;
-    [SerializeField] protected float attackRange = 1f;
-    [SerializeField] protected float nextDmg = 0.5f;
-    [SerializeField] protected float checkRadius;
-    [SerializeField] protected float dissappearTime = 5f;
-    [SerializeField] protected float knockPower = 200000f;
-    [SerializeField] protected float stunTime = 0.5f;
+    [Header("Behaviours")]
     [SerializeField] protected bool moveRight;
     [SerializeField] protected bool touchDamage;
-    
+
+    [Header("Movement")]
+    [SerializeField] protected float enemySpeed = 2f;
+    [SerializeField] protected float aggroSpeed = 3f;
+    [SerializeField] protected float patrolWaitTime = 2f;
+    [SerializeField] protected float checkRadius = 0.1f;
+    [SerializeField] protected float stunTime = 0.5f;
+    [SerializeField] protected float getKnockedPwr = 100000f;
+
+    [Header("Combat")]
+    [SerializeField] protected float enemyHealth = 10f;
+    [SerializeField] protected float enemyDamage = 5f;
+    [SerializeField] protected float aggroRange = 5f;
+    [SerializeField] protected float attackRange = 1.5f;
+    [SerializeField] protected float attackArea = 1f;
+    [SerializeField] protected float knockPower = 500f;
+
+    [Header("Combat Timers")]
+    [SerializeField] protected float attackDelay = 1f;
+    [SerializeField] protected float touchDmgTime = 0.5f;
+    [SerializeField] protected float dissappearTime = 5f;
+
     protected float currEnemyHealth;
-    protected float _patrolWaitTime;
     protected float currTime = 0f;
+    protected float _patrolWaitTime;
     protected float _stunTime;
+    protected float _attackDelay = 0f;
     protected bool hittingWall;
     protected bool notAtEdge;
     protected bool notDead = true;
+    protected bool notAttacking = true;
     protected bool stunned;
 
     protected GameObject player;
     protected PlayerHealth playerHealth;
     protected Rigidbody2D rb;
+    protected Rigidbody2D playerRb;
     protected Transform target;
 
     protected virtual void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
+        playerRb = player.GetComponent<Rigidbody2D>();
         rb = GetComponent<Rigidbody2D>();
         target = player.GetComponent<Transform>();
     }
@@ -122,9 +139,20 @@ public class EnemyController : MonoBehaviour
             if (hit.collider.gameObject.CompareTag("Player"))
             {
                 seesPlayer = true;
+
                 if (hit.distance <= attackRange)
                 {
-                    Attack();
+                    notAttacking = false;
+
+                    if (Time.time >= _attackDelay && !stunned)
+                    {
+                        Attack();
+                        _attackDelay = Time.time + attackDelay;
+                    }
+                }
+                else
+                {
+                    notAttacking = true;
                 }
             }
             else
@@ -142,7 +170,7 @@ public class EnemyController : MonoBehaviour
     {
         notAtEdge = Physics2D.OverlapCircle(edgeCheck.position, checkRadius, whatIsObstacle);
 
-        if (notAtEdge && notDead)
+        if (notAtEdge && notDead && notAttacking)
         {
             if (transform.position.x < target.position.x)
             {
@@ -178,6 +206,7 @@ public class EnemyController : MonoBehaviour
         Gizmos.DrawWireSphere(castPoint.position, aggroRange);
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(castPoint.position, attackRange);
+        Gizmos.DrawWireSphere(hitPoint.position, attackArea);
     }
 
     protected virtual void OnCollisionStay2D(Collision2D col)
@@ -189,7 +218,7 @@ public class EnemyController : MonoBehaviour
                 if (currTime <= 0)
                 {
                     playerHealth.TakeDamage(enemyDamage);
-                    currTime = nextDmg;
+                    currTime = touchDmgTime;
                 }
                 else
                 {
@@ -201,7 +230,7 @@ public class EnemyController : MonoBehaviour
 
     public virtual void EnemyTakeDamage(float damage)
     {
-        rb.AddForce(transform.right * knockPower);
+        rb.AddForce(transform.right * getKnockedPwr);
         currEnemyHealth -= damage;
         enemyAnim.SetTrigger("Damage");
         stunned = true;

@@ -6,14 +6,18 @@ public class BulletScript : MonoBehaviour
 {
     private GameObject player;
     private PlayerHealth playerHealth;
+    private Rigidbody2D playerRb;
+    public float bulletDir = 1;
+    public float bulletDamage = 1f;
 
-    [SerializeField] private float bulletDamage = 1f;
     [SerializeField] private float destroyTime = 5f;
+    [SerializeField] private float knockPower = 500f;
 
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
+        playerRb = player.GetComponent<Rigidbody2D>();
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -22,6 +26,7 @@ public class BulletScript : MonoBehaviour
         {
             Destroy(gameObject);
             playerHealth.TakeDamage(bulletDamage);
+            playerRb.AddForce(transform.right * -knockPower * bulletDir);
         }
         else if(col.gameObject.CompareTag("Ground"))
         {

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5344515669482591293}
   - component: {fileID: -7474530251488402817}
   m_Layer: 0
-  m_Name: Bullet
+  m_Name: Enemy Arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 2b3b17e36d3e4e84b91d91dc16470903, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -135,6 +135,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletDir: 1
-  bulletDamage: 1
+  bulletDamage: 5
   destroyTime: 5
   knockPower: 500

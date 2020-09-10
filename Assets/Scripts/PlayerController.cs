@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     private RaycastHit2D ledgeInfo;
 
     private int extraJumps;
+    private bool jumpInput;
     private float currDashTimer;
     private float elapsedTime = 0f;
     public static float playerDirection = 1f;
@@ -67,7 +68,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        CheckInput();   
+        CheckInput();
     }
 
     private void FixedUpdate()
@@ -85,6 +86,7 @@ public class PlayerController : MonoBehaviour
     private void CheckInput()
     {
         moveInput = inputControls.Player.Move.ReadValue<Vector2>();
+        jumpInput = inputControls.Player.Jump.triggered;
     }
 
     private void CheckSurroundings()
