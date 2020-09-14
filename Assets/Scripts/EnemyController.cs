@@ -13,6 +13,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] protected Transform hitPoint;
     [SerializeField] protected LayerMask whatIsObstacle;
     [SerializeField] protected LayerMask damageTarget;
+    [SerializeField] protected UIHealthBar healthBar;
 
     [Header("Behaviours")]
     [SerializeField] protected bool moveRight;
@@ -28,7 +29,7 @@ public class EnemyController : MonoBehaviour
 
     [Header("Combat")]
     [SerializeField] protected float enemyHealth = 10f;
-    [SerializeField] protected float enemyDamage = 5f;
+    [SerializeField] public float enemyDamage = 5f;
     [SerializeField] protected float aggroRange = 5f;
     [SerializeField] protected float attackRange = 1.5f;
     [SerializeField] protected float attackArea = 1f;
@@ -36,14 +37,17 @@ public class EnemyController : MonoBehaviour
 
     [Header("Combat Timers")]
     [SerializeField] protected float attackDelay = 1f;
+    [SerializeField] protected float aggroTime = 5f;
     [SerializeField] protected float touchDmgTime = 0.5f;
     [SerializeField] protected float dissappearTime = 5f;
 
-    protected float currEnemyHealth;
-    protected float currTime = 0f;
+    public float _enemyHealth;
+    protected float _touchDmgTime;
     protected float _patrolWaitTime;
     protected float _stunTime;
-    protected float _attackDelay = 0f;
+    protected float _attackDelay;
+    protected float _enemySpeed;
+    protected float _aggroTime;
     protected bool hittingWall;
     protected bool notAtEdge;
     protected bool notDead = true;
@@ -67,9 +71,11 @@ public class EnemyController : MonoBehaviour
 
     protected virtual void Start()
     {
-        currEnemyHealth = enemyHealth;
+        _enemyHealth = enemyHealth;
+        _enemySpeed = enemySpeed;
         _patrolWaitTime = patrolWaitTime;
         _stunTime = stunTime;
+        healthBar.SetHealth(_enemyHealth, enemyHealth);
     }
 
     protected virtual void FixedUpdate()
@@ -94,7 +100,6 @@ public class EnemyController : MonoBehaviour
                 _stunTime = stunTime;
             }
         }
-
         enemyAnim.SetFloat("Speed", Math.Abs(rb.velocity.x));
     }
 
@@ -102,6 +107,13 @@ public class EnemyController : MonoBehaviour
     {
         hittingWall = Physics2D.OverlapCircle(wallCheck.position, checkRadius, whatIsObstacle);
         notAtEdge = Physics2D.OverlapCircle(edgeCheck.position, checkRadius, whatIsObstacle);
+
+        if (_aggroTime <= 0)
+        {
+            enemySpeed = _enemySpeed;
+        }
+
+        _aggroTime -= Time.deltaTime;
 
         if (hittingWall || !notAtEdge)
         {
@@ -144,7 +156,7 @@ public class EnemyController : MonoBehaviour
                 {
                     notAttacking = false;
 
-                    if (Time.time >= _attackDelay && !stunned)
+                    if (Time.time >= _attackDelay && !stunned && notDead)
                     {
                         Attack();
                         _attackDelay = Time.time + attackDelay;
@@ -169,6 +181,8 @@ public class EnemyController : MonoBehaviour
     protected virtual void FollowPlayer()
     {
         notAtEdge = Physics2D.OverlapCircle(edgeCheck.position, checkRadius, whatIsObstacle);
+        _aggroTime = aggroTime;
+        enemySpeed = aggroSpeed;
 
         if (notAtEdge && notDead && notAttacking)
         {
@@ -215,14 +229,14 @@ public class EnemyController : MonoBehaviour
         {
             if (col.gameObject.CompareTag("Player"))
             {
-                if (currTime <= 0)
+                if (_touchDmgTime <= 0)
                 {
                     playerHealth.TakeDamage(enemyDamage);
-                    currTime = touchDmgTime;
+                    _touchDmgTime = touchDmgTime;
                 }
                 else
                 {
-                    currTime -= Time.deltaTime;
+                    _touchDmgTime -= Time.deltaTime;
                 }
             }
         }
@@ -231,14 +245,16 @@ public class EnemyController : MonoBehaviour
     public virtual void EnemyTakeDamage(float damage)
     {
         rb.AddForce(transform.right * getKnockedPwr);
-        currEnemyHealth -= damage;
+        _enemyHealth -= damage;
+        healthBar.SetHealth(_enemyHealth, enemyHealth);
         enemyAnim.SetTrigger("Damage");
         stunned = true;
         //FIX: If enemy takes damage from traps, it will still follow player.
         FollowPlayer();
 
-        if (currEnemyHealth <= 0)
+        if (_enemyHealth <= 0)
         {
+            healthBar.enemyDied(true);
             Die();
         }
     }

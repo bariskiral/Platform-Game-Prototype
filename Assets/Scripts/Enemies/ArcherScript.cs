@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ArcherScript : EnemyController
 {
-    [Header("Archer Specs")]
+    [Header("Archer Parameters")]
     [SerializeField] private GameObject arrow;
     [SerializeField] private Transform rotatingObject;
     [SerializeField] private float shotForce = 500f;

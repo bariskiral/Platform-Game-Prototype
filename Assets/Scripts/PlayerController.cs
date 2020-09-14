@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     private bool jumpInput;
     private float currDashTimer;
     private float elapsedTime = 0f;
-    public static float playerDirection = 1f;
+    private float playerDirection = 1f;
 
     [Header("Drag Components")]
     [SerializeField] private Animator anim;
