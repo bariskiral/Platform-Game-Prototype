@@ -46,9 +46,12 @@ public class ArrowScript : MonoBehaviour
         else if (col.gameObject.CompareTag("Enemy"))
         {
             Destroy(gameObject);
-            playerHealth.GainHealth(arrowDamage);
+
+            if (col.gameObject.GetComponent<EnemyController>()._enemyShield <= 0)
+            {
+                playerHealth.GainHealth(arrowDamage);
+            }    
             col.gameObject.GetComponent<EnemyController>().EnemyTakeDamage(arrowDamage);
-            
         }
 
         else

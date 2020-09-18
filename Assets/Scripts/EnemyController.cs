@@ -29,6 +29,7 @@ public class EnemyController : MonoBehaviour
 
     [Header("Combat")]
     [SerializeField] protected float enemyHealth = 10f;
+    [SerializeField] public float enemyShield = 0f;
     [SerializeField] public float enemyDamage = 5f;
     [SerializeField] protected float aggroRange = 5f;
     [SerializeField] protected float attackRange = 1.5f;
@@ -41,7 +42,9 @@ public class EnemyController : MonoBehaviour
     [SerializeField] protected float touchDmgTime = 0.5f;
     [SerializeField] protected float dissappearTime = 5f;
 
-    public float _enemyHealth;
+    [HideInInspector] public float _enemyHealth;
+    [HideInInspector] public float _enemyShield;
+
     protected float _touchDmgTime;
     protected float _patrolWaitTime;
     protected float _stunTime;
@@ -72,10 +75,12 @@ public class EnemyController : MonoBehaviour
     protected virtual void Start()
     {
         _enemyHealth = enemyHealth;
+        _enemyShield = enemyShield;
         _enemySpeed = enemySpeed;
         _patrolWaitTime = patrolWaitTime;
         _stunTime = stunTime;
         healthBar.SetHealth(_enemyHealth, enemyHealth);
+        healthBar.SetShield(_enemyShield, enemyShield);
     }
 
     protected virtual void FixedUpdate()
@@ -245,9 +250,21 @@ public class EnemyController : MonoBehaviour
     public virtual void EnemyTakeDamage(float damage)
     {
         rb.AddForce(transform.right * getKnockedPwr);
-        _enemyHealth -= damage;
-        healthBar.SetHealth(_enemyHealth, enemyHealth);
+
+        if (_enemyShield > 0)
+        {
+            _enemyShield -= damage;
+            healthBar.SetShield(_enemyShield, enemyShield);
+        }
+        else
+        {
+            _enemyHealth -= damage;
+            healthBar.SetHealth(_enemyHealth, enemyHealth);
+        }
+
         enemyAnim.SetTrigger("Damage");
+        _stunTime = stunTime;
+        _attackDelay = Time.time + attackDelay;
         stunned = true;
         //FIX: If enemy takes damage from traps, it will still follow player.
         FollowPlayer();
