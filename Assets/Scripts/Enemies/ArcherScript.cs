@@ -12,7 +12,7 @@ public class ArcherScript : EnemyController
     protected override void Start()
     {
         base.Start();
-        arrow.GetComponent<BulletScript>().bulletDamage = enemyDamage;
+        arrow.GetComponent<Projectile>().projectileDamage = enemyDamage;
     }
 
     private void Update()
@@ -28,11 +28,10 @@ public class ArcherScript : EnemyController
 
     private void Shoot()
     {
-        //TODO: Animation.
         GameObject bulletClone = Instantiate(arrow, hitPoint.position, hitPoint.rotation);
         Vector2 dir = (player.transform.position - castPoint.position).normalized;
         bulletClone.GetComponent<Rigidbody2D>().AddForce(dir * shotForce);
-        bulletClone.GetComponent<BulletScript>().bulletDir = -1;
+        bulletClone.GetComponent<Projectile>().projectileDir = -1;
     }
 
     private void Rotate()

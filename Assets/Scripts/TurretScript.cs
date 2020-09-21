@@ -46,7 +46,7 @@ public class TurretScript : MonoBehaviour
 
         if (hit.distance <= distance)
         {
-            if (hit.collider.gameObject.CompareTag("Player"))
+            if (hit.collider.gameObject == player)
             {
                 seesPlayer = true;
             }
@@ -58,7 +58,6 @@ public class TurretScript : MonoBehaviour
         }
 
         return seesPlayer;
-
     }
 
     private void Shoot()
@@ -66,17 +65,17 @@ public class TurretScript : MonoBehaviour
         shotTime += Time.deltaTime;
         if (shotTime >= shotDelay)
         {
-            GameObject bulletClone = Instantiate(bullet, castPoint.position, Quaternion.identity);
+            GameObject projectileClone = Instantiate(bullet, castPoint.position, Quaternion.identity);
             Vector2 dir = (player.transform.position - castPoint.position).normalized;
-            bulletClone.GetComponent<Rigidbody2D>().AddForce(dir * shotForce);
+            projectileClone.GetComponent<Rigidbody2D>().AddForce(dir * shotForce);
 
             if (transform.position.x < target.position.x)
             {
-                bulletClone.GetComponent<BulletScript>().bulletDir = -1;
+                projectileClone.GetComponent<Projectile>().projectileDir = -1;
             }
             else
             {
-                bulletClone.GetComponent<BulletScript>().bulletDir = 1;
+                projectileClone.GetComponent<Projectile>().projectileDir = 1;
             }
 
             shotTime = 0;

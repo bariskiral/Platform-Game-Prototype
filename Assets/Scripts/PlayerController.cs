@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Behaviours")]
     [SerializeField] private bool isGrounded;
-    [SerializeField] private bool isDashing;
+    [SerializeField] public bool isDashing;
     [SerializeField] private bool isClimbing;
     [SerializeField] private bool isWallSliding;
 
@@ -207,6 +207,8 @@ public class PlayerController : MonoBehaviour
 
     private void Dashing()
     {
+        Physics2D.IgnoreLayerCollision(9, 11, isDashing);
+
         if (isDashing)
         {
             rb.velocity = new Vector2(dashPower * playerDirection, 0.0f);
@@ -240,5 +242,4 @@ public class PlayerController : MonoBehaviour
     {
         inputControls.Disable();
     }
-
 }

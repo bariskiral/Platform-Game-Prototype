@@ -47,7 +47,6 @@ public class UIHealthBar : MonoBehaviour
         if (_shieldTimer < 0)
         {
             shieldImage.fillAmount += shrinkSpeed * Time.deltaTime;
-            //enemy._enemyShield = enemy.enemyShield;
             GetComponentInParent<EnemyController>()._enemyShield = GetComponentInParent<EnemyController>().enemyShield;
         }
     }

@@ -14,6 +14,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] protected LayerMask whatIsObstacle;
     [SerializeField] protected LayerMask damageTarget;
     [SerializeField] protected UIHealthBar healthBar;
+    [SerializeField] protected GameObject floatingValues;
 
     [Header("Behaviours")]
     [SerializeField] protected bool moveRight;
@@ -56,6 +57,7 @@ public class EnemyController : MonoBehaviour
     protected bool notDead = true;
     protected bool notAttacking = true;
     protected bool stunned;
+    protected bool playerDashing;
 
     protected GameObject player;
     protected PlayerHealth playerHealth;
@@ -105,7 +107,9 @@ public class EnemyController : MonoBehaviour
                 _stunTime = stunTime;
             }
         }
+
         enemyAnim.SetFloat("Speed", Math.Abs(rb.velocity.x));
+        playerDashing = player.GetComponent<PlayerController>().isDashing;
     }
 
     protected virtual void Patrol()
@@ -153,7 +157,7 @@ public class EnemyController : MonoBehaviour
 
         if (hit.distance <= distance)
         {
-            if (hit.collider.gameObject.CompareTag("Player"))
+            if (hit.collider.gameObject == player)
             {
                 seesPlayer = true;
 
@@ -161,9 +165,10 @@ public class EnemyController : MonoBehaviour
                 {
                     notAttacking = false;
 
-                    if (Time.time >= _attackDelay && !stunned && notDead)
+                    if (Time.time >= _attackDelay && !stunned && notDead && !playerDashing)
                     {
-                        Attack();
+                        //Attack();
+                        enemyAnim.SetTrigger("Attack");
                         _attackDelay = Time.time + attackDelay;
                     }
                 }
@@ -232,7 +237,7 @@ public class EnemyController : MonoBehaviour
     {
         if (touchDamage)
         {
-            if (col.gameObject.CompareTag("Player"))
+            if (col.gameObject == player)
             {
                 if (_touchDmgTime <= 0)
                 {
@@ -261,6 +266,9 @@ public class EnemyController : MonoBehaviour
             _enemyHealth -= damage;
             healthBar.SetHealth(_enemyHealth, enemyHealth);
         }
+
+        GameObject damageDisplay = Instantiate(floatingValues, transform.position, Quaternion.identity);
+        damageDisplay.transform.GetChild(0).GetComponent<TextMesh>().text = "" + damage;
 
         enemyAnim.SetTrigger("Damage");
         _stunTime = stunTime;
