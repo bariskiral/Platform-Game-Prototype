@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    #region Variables
+
     [Header("Drag Components")]
     [SerializeField] protected Animator enemyAnim;
     [SerializeField] protected Transform wallCheck;
@@ -54,16 +54,20 @@ public class EnemyController : MonoBehaviour
     protected float _aggroTime;
     protected bool hittingWall;
     protected bool notAtEdge;
+    protected bool seesPlayer;
     protected bool notDead = true;
     protected bool notAttacking = true;
     protected bool stunned;
     protected bool playerDashing;
+    protected bool isPlayerRange;
 
     protected GameObject player;
     protected PlayerHealth playerHealth;
     protected Rigidbody2D rb;
     protected Rigidbody2D playerRb;
     protected Transform target;
+
+    #endregion
 
     protected virtual void Awake()
     {
@@ -151,7 +155,7 @@ public class EnemyController : MonoBehaviour
 
     protected virtual bool CanSeePlayer(float distance)
     {
-        bool seesPlayer = false;
+        seesPlayer = false;
 
         RaycastHit2D hit = Physics2D.Linecast(castPoint.position, target.position, whatIsObstacle);
 
@@ -163,29 +167,24 @@ public class EnemyController : MonoBehaviour
 
                 if (hit.distance <= attackRange)
                 {
-                    notAttacking = false;
-
                     if (Time.time >= _attackDelay && !stunned && notDead && !playerDashing)
                     {
-                        //Attack();
+                        notAttacking = false;
+                        isPlayerRange = true;
                         enemyAnim.SetTrigger("Attack");
                         _attackDelay = Time.time + attackDelay;
                     }
                 }
                 else
                 {
-                    notAttacking = true;
+                    isPlayerRange = false;
                 }
             }
-            else
-            {
-                seesPlayer = false;
-            }
+
             Debug.DrawLine(castPoint.position, hit.point, Color.red);
         }
 
         return seesPlayer;
-
     }
 
     protected virtual void FollowPlayer()
@@ -194,7 +193,7 @@ public class EnemyController : MonoBehaviour
         _aggroTime = aggroTime;
         enemySpeed = aggroSpeed;
 
-        if (notAtEdge && notDead && notAttacking)
+        if (notAtEdge && notDead && notAttacking && !isPlayerRange)
         {
             if (transform.position.x < target.position.x)
             {
@@ -216,21 +215,48 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    protected virtual void NotAttackingTrigger()
+    {
+        notAttacking = true;
+    }
+
     protected virtual void Attack()
     {
         //Different attack for every type of enemy.
     }
 
-    protected virtual void OnDrawGizmosSelected()
+    public virtual void EnemyTakeDamage(float damage)
     {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(wallCheck.position, checkRadius);
-        Gizmos.DrawWireSphere(edgeCheck.position, checkRadius);
-        Gizmos.color = Color.magenta;
-        Gizmos.DrawWireSphere(castPoint.position, aggroRange);
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(castPoint.position, attackRange);
-        Gizmos.DrawWireSphere(hitPoint.position, attackArea);
+        rb.AddForce(transform.right * getKnockedPwr);
+
+        if (_enemyShield > 0)
+        {
+            _enemyShield -= damage;
+            healthBar.SetShield(_enemyShield, enemyShield);
+        }
+        else
+        {
+            _enemyHealth -= damage;
+            healthBar.SetHealth(_enemyHealth, enemyHealth);
+        }
+
+        GameObject damageDisplay = Instantiate(floatingValues, transform.position, Quaternion.identity);
+        damageDisplay.transform.SetParent(transform);
+        damageDisplay.transform.GetChild(0).GetComponent<TextMesh>().text = "" + damage;
+
+        notAttacking = true;
+        enemyAnim.SetTrigger("Damage");
+        _stunTime = stunTime;
+        stunned = true;
+        _attackDelay = Time.time + attackDelay;
+        //FIX: If enemy takes damage from traps, it will still follow player.
+        FollowPlayer();
+
+        if (_enemyHealth <= 0)
+        {
+            healthBar.enemyDied(true);
+            Die();
+        }
     }
 
     protected virtual void OnCollisionStay2D(Collision2D col)
@@ -252,38 +278,6 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    public virtual void EnemyTakeDamage(float damage)
-    {
-        rb.AddForce(transform.right * getKnockedPwr);
-
-        if (_enemyShield > 0)
-        {
-            _enemyShield -= damage;
-            healthBar.SetShield(_enemyShield, enemyShield);
-        }
-        else
-        {
-            _enemyHealth -= damage;
-            healthBar.SetHealth(_enemyHealth, enemyHealth);
-        }
-
-        GameObject damageDisplay = Instantiate(floatingValues, transform.position, Quaternion.identity);
-        damageDisplay.transform.GetChild(0).GetComponent<TextMesh>().text = "" + damage;
-
-        enemyAnim.SetTrigger("Damage");
-        _stunTime = stunTime;
-        _attackDelay = Time.time + attackDelay;
-        stunned = true;
-        //FIX: If enemy takes damage from traps, it will still follow player.
-        FollowPlayer();
-
-        if (_enemyHealth <= 0)
-        {
-            healthBar.enemyDied(true);
-            Die();
-        }
-    }
-
     protected virtual void Die()
     {
         notDead = false;
@@ -291,5 +285,17 @@ public class EnemyController : MonoBehaviour
         gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
         GetComponent<Collider2D>().enabled = false;
         Destroy(gameObject, dissappearTime);
+    }
+
+    protected virtual void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(wallCheck.position, checkRadius);
+        Gizmos.DrawWireSphere(edgeCheck.position, checkRadius);
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(castPoint.position, aggroRange);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(castPoint.position, attackRange);
+        Gizmos.DrawWireSphere(hitPoint.position, attackArea);
     }
 }

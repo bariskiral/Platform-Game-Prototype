@@ -34,7 +34,7 @@ public class ProjectileWithArc : MonoBehaviour
         playerDashing = player.GetComponent<PlayerController>().isDashing;
     }
 
-    private void OnTriggerEnter2D(Collider2D col)
+    private void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject == player && !playerDashing)
         {
@@ -43,6 +43,11 @@ public class ProjectileWithArc : MonoBehaviour
             playerRb.AddForce(transform.right * -knockPower);
         }
         else if (col.gameObject.CompareTag("Ground"))
+        {
+            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            Destroy(gameObject, destroyTime);
+        }
+        else
         {
             Destroy(gameObject);
         }

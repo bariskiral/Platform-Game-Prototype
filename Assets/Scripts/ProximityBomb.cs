@@ -8,6 +8,8 @@ public class ProximityBomb : MonoBehaviour
     [SerializeField] private float expRadius;
     [SerializeField] private float damage;
     [SerializeField] private bool canDamageEnemy = true;
+    [SerializeField] private GameObject floatingValues;
+    private GameObject countDownText;
 
     private float countdown;
     private bool hasExploded;
@@ -16,13 +18,20 @@ public class ProximityBomb : MonoBehaviour
     void Start()
     {
         countdown = timer;
+        countDownText = Instantiate(floatingValues, transform.position, Quaternion.identity);
+        countDownText.transform.SetParent(transform);
+        countDownText.SetActive(false);
     }
 
     void Update()
     {
         if (trigger)
         {
+            countDownText.SetActive(true);
+            countDownText.transform.GetChild(0).GetComponent<TextMesh>().text = "" + ((int)countdown + 1);
+
             countdown -= Time.deltaTime;
+
             if (countdown <= 0 && !hasExploded)
             {
                 Explode();

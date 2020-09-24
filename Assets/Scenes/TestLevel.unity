@@ -1133,7 +1133,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &430251748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1165,13 +1165,13 @@ MonoBehaviour:
   aggroSpeed: 4
   patrolWaitTime: 2
   checkRadius: 0.1
-  stunTime: 0.5
+  stunTime: 0.1
   getKnockedPwr: 10000
   enemyHealth: 30
   enemyShield: 0
   enemyDamage: 5
   aggroRange: 10
-  attackRange: 2.5
+  attackRange: 2
   attackArea: 1
   knockPower: 500
   attackDelay: 1
@@ -1181,7 +1181,7 @@ MonoBehaviour:
   _enemyHealth: 0
   _enemyShield: 0
   bomb: {fileID: 4780055378421149570, guid: a1b1616c7a44068428c539f59f8bc6a3, type: 3}
-  bombDelay: 0.5
+  bombDelay: 1
   bombAttackRange: 6
 --- !u!95 &430251749
 Animator:
@@ -103509,7 +103509,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 816331136}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 52.14, y: 16.66, z: -10}
+  m_LocalPosition: {x: 38.73, y: 8.08, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 717101524}
@@ -104064,6 +104064,7 @@ GameObject:
   - component: {fileID: 965980961}
   - component: {fileID: 965980960}
   - component: {fileID: 965980959}
+  - component: {fileID: 965980962}
   m_Layer: 0
   m_Name: ProximityBomb
   m_TagString: Untagged
@@ -104087,6 +104088,7 @@ MonoBehaviour:
   expRadius: 2
   damage: 50
   canDamageEnemy: 1
+  floatingValues: {fileID: 7249508778237012316, guid: f5bdf70f4b7d1784d8c0ef8119fe335d, type: 3}
 --- !u!212 &965980957
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -104146,7 +104148,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 965980955}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 27.64, y: -4.84, z: 0}
+  m_LocalPosition: {x: 44.01, y: 6.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -104166,7 +104168,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 50
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 5
   m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 0
@@ -104205,6 +104207,18 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 3
+--- !u!114 &965980962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965980955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ce2836719e5da64484883501eb87c0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &988840723
 GameObject:
   m_ObjectHideFlags: 0
@@ -104546,7 +104560,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1084222961}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5, y: 0.5, z: 0}
+  m_LocalPosition: {x: -0.25, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1243192403}
@@ -104767,7 +104781,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!95 &1243192399
 Animator:
   serializedVersion: 3
@@ -104893,7 +104907,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1243192397}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 64.02, y: 14.16, z: 0}
+  m_LocalPosition: {x: 63.31, y: 14.29, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 903582939}
@@ -104937,7 +104951,7 @@ MonoBehaviour:
   checkRadius: 0.1
   stunTime: 0.5
   getKnockedPwr: 10000
-  enemyHealth: 5
+  enemyHealth: 500
   enemyShield: 0
   enemyDamage: 5
   aggroRange: 15
@@ -105702,7 +105716,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1334609349}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 52.14, y: 15.26, z: 0}
+  m_LocalPosition: {x: 38.73, y: 6.68, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 1616167648}
@@ -106748,8 +106762,8 @@ MonoBehaviour:
   floatingValues: {fileID: 6185959897001689227, guid: cafcb4c148e99b741a714681ee563ff6, type: 3}
   moveRight: 0
   touchDamage: 1
-  enemySpeed: 0
-  aggroSpeed: 0
+  enemySpeed: 2
+  aggroSpeed: 4
   patrolWaitTime: 2
   checkRadius: 0.1
   stunTime: 0.5
@@ -109170,7 +109184,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2045893887}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: -1, z: 0}
+  m_LocalPosition: {x: 40.97, y: 6.31, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 636546034}
@@ -109208,17 +109222,17 @@ MonoBehaviour:
   floatingValues: {fileID: 6185959897001689227, guid: cafcb4c148e99b741a714681ee563ff6, type: 3}
   moveRight: 0
   touchDamage: 1
-  enemySpeed: 0
-  aggroSpeed: 0
+  enemySpeed: 2
+  aggroSpeed: 4
   patrolWaitTime: 2
   checkRadius: 0.1
-  stunTime: 0.5
+  stunTime: 0.25
   getKnockedPwr: 10000
   enemyHealth: 10
   enemyShield: 0
   enemyDamage: 5
   aggroRange: 5
-  attackRange: 1.5
+  attackRange: 1
   attackArea: 0.5
   knockPower: 500
   attackDelay: 1

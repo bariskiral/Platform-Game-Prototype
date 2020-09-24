@@ -44,6 +44,7 @@ public class ExecutionerScript : EnemyController
 
                     if (Time.time >= _bombDelay && !stunned && notDead)
                     {
+                        //enemyAnim.SetTrigger("ThrowBomb");
                         ThrowBomb();
                         _bombDelay = Time.time + bombDelay;
                     }
@@ -85,7 +86,7 @@ public class ExecutionerScript : EnemyController
 
     private void Rotate()
     {
-        if (CanSeePlayer(aggroRange))
+        if (CanSeePlayer(aggroRange) && notDead)
         {
             if (transform.position.x < target.position.x)
             {

@@ -36,7 +36,7 @@ public class ArcherScript : EnemyController
 
     private void Rotate()
     {
-        if (CanSeePlayer(aggroRange))
+        if (CanSeePlayer(aggroRange) && notDead)
         {
             if (transform.position.x < target.position.x)
             {
