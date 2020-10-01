@@ -56,7 +56,7 @@ public class ArrowScript : MonoBehaviour
 
         else
         {
-            Destroy(gameObject, destroyTime * 2);
+            Destroy(gameObject);
         }
     }
 

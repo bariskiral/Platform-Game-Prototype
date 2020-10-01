@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4780055378249063970}
   - component: {fileID: 4780055378249063997}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: GFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,9 +94,9 @@ GameObject:
   - component: {fileID: 4780055378421149596}
   - component: {fileID: 4780055378421149597}
   - component: {fileID: 1688561540617856199}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Bomb
-  m_TagString: Untagged
+  m_TagString: EnemyProjectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -165,8 +165,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b062b3a82a1bde140911e797c90c7a42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timer: 3
+  expRadius: 3
   throwSpeed: 7
-  proWithArcDmg: 5
+  proWithArcDmg: 10
   destroyTime: 5
-  knockPower: 0
+  knockPower: 500
   Offset: {x: 0, y: 0.6, z: 0}

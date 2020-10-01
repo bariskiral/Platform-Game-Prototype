@@ -6,25 +6,28 @@ public class ProximityBomb : MonoBehaviour
 {
     [SerializeField] private float timer;
     [SerializeField] private float expRadius;
+    [SerializeField] private float trigRadius;
     [SerializeField] private float damage;
     [SerializeField] private bool canDamageEnemy = true;
+    [SerializeField] private LayerMask trigLayer;
     [SerializeField] private GameObject floatingValues;
-    private GameObject countDownText;
 
     private float countdown;
     private bool hasExploded;
     private bool trigger;
+    private GameObject countDownText;
 
-    void Start()
+    private void Start()
     {
         countdown = timer;
         countDownText = Instantiate(floatingValues, transform.position, Quaternion.identity);
         countDownText.transform.SetParent(transform);
-        countDownText.SetActive(false);
     }
 
-    void Update()
+    private void Update()
     {
+        CheckTrigger();
+
         if (trigger)
         {
             countDownText.SetActive(true);
@@ -39,9 +42,11 @@ public class ProximityBomb : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D col)
+    private void CheckTrigger()
     {
-        if (col.gameObject.CompareTag("Player"))
+        Collider2D triggerActive = Physics2D.OverlapCircle(transform.position, trigRadius, trigLayer);
+
+        if (triggerActive != null)
         {
             trigger = true;
         }
@@ -73,5 +78,7 @@ public class ProximityBomb : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, expRadius);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, trigRadius);
     }
 }

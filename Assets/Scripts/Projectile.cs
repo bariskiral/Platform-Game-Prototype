@@ -7,8 +7,8 @@ public class Projectile : MonoBehaviour
     [SerializeField] private float destroyTime = 5f;
     [SerializeField] private float knockPower = 500f;
 
-    public float projectileDir = 1;
     public float projectileDamage = 1f;
+    public float projectileDir = 1;
     private bool playerDashing;
 
     private GameObject player;

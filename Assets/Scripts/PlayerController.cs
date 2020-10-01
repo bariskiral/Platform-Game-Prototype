@@ -22,8 +22,10 @@ public class PlayerController : MonoBehaviour
 
     [Header("Drag Components")]
     [SerializeField] private Animator anim;
-    [SerializeField] private LayerMask ground;
+    [SerializeField] private LayerMask whatIsGround;
     [SerializeField] private LayerMask whatIsLadder;
+    [SerializeField] private LayerMask whatIsWall;
+    [SerializeField] private LayerMask whatIsLedge;
     [SerializeField] private Transform groudCheck;
     [SerializeField] private Transform wallCheck;
     [SerializeField] private Transform ledgeCheck;
@@ -91,10 +93,10 @@ public class PlayerController : MonoBehaviour
 
     private void CheckSurroundings()
     {
-        isGrounded = Physics2D.OverlapCircle(groudCheck.position, checkRadius, ground);
+        isGrounded = Physics2D.OverlapCircle(groudCheck.position, checkRadius, whatIsGround);
         ladderInfo = Physics2D.Raycast(transform.position, Vector2.up, 2, whatIsLadder);
-        wallInfo = Physics2D.Raycast(wallCheck.position, transform.right, rayCheckDis, ground);
-        ledgeInfo = Physics2D.Raycast(ledgeCheck.position, transform.right, rayCheckDis, ground);
+        wallInfo = Physics2D.Raycast(wallCheck.position, transform.right, rayCheckDis, whatIsWall);
+        ledgeInfo = Physics2D.Raycast(ledgeCheck.position, transform.right, rayCheckDis, whatIsLedge);
 
         Debug.DrawRay(wallCheck.position, new Vector3(rayCheckDis * playerDirection, 0, 0), Color.white);
         Debug.DrawRay(ledgeCheck.position, new Vector3(rayCheckDis * playerDirection, 0, 0), Color.white);
@@ -166,7 +168,7 @@ public class PlayerController : MonoBehaviour
         {
             Vector2 playerCoord = transform.position;
             Vector2 offsetCoord = new Vector2(1f * playerDirection, 1f);
-            //TODO: Player climb animation
+            //TODO: Player climb animation and add animation event to change position.
             transform.position = playerCoord + offsetCoord;
         }       
     }
