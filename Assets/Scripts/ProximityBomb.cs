@@ -28,6 +28,7 @@ public class ProximityBomb : MonoBehaviour
     {
         CheckTrigger();
 
+        //TODO: Explosion countdown effect.
         if (trigger)
         {
             countDownText.SetActive(true);

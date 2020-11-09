@@ -30,7 +30,7 @@ public class ExecutionerScript : EnemyController
                 {
                     notAttacking = false;
 
-                    if (Time.time >= _attackDelay && !stunned && notDead)
+                    if (Time.time >= _attackDelay && !stunned && notDead && !playerHealth.playerIsDead)
                     {
                         //Attack();
                         enemyAnim.SetTrigger("Attack");
@@ -42,7 +42,7 @@ public class ExecutionerScript : EnemyController
                 {
                     notAttacking = false;
 
-                    if (Time.time >= _bombDelay && !stunned && notDead)
+                    if (Time.time >= _bombDelay && !stunned && notDead && !playerHealth.playerIsDead)
                     {
                         //enemyAnim.SetTrigger("ThrowBomb");
                         ThrowBomb();

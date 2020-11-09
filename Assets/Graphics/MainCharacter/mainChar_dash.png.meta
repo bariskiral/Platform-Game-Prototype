@@ -1,7 +1,10 @@
 fileFormatVersion: 2
-guid: 388de860f4e9c304f8b9566adc92ba5b
+guid: bf01cefb22c5adf44aa4f0915ef85993
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -1638228189901342288
+    second: mainChar_dash_0
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -87,7 +90,28 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: mainChar_dash_0
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 26
+        width: 64
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b936e71428d349e0800000000000000
+      internalID: -1638228189901342288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []

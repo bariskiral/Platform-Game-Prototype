@@ -167,7 +167,7 @@ public class EnemyController : MonoBehaviour
 
                 if (hit.distance <= attackRange)
                 {
-                    if (Time.time >= _attackDelay && !stunned && notDead && !playerDashing)
+                    if (Time.time >= _attackDelay && !stunned && notDead && !playerDashing && !playerHealth.playerIsDead)
                     {
                         notAttacking = false;
                         isPlayerRange = true;

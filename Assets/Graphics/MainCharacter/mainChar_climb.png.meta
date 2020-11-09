@@ -1,7 +1,19 @@
 fileFormatVersion: 2
 guid: c1a96f1b9fc59b0488c54940938f19ed
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -1104093859044109425
+    second: mainChar_climb_0
+  - first:
+      213: -8630411869778443861
+    second: mainChar_climb_1
+  - first:
+      213: 4720909622772034996
+    second: mainChar_climb_2
+  - first:
+      213: 3705473748958507934
+    second: mainChar_climb_3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -87,7 +99,91 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: mainChar_climb_0
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 31
+        width: 96
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f835cf42c787da0f0800000000000000
+      internalID: -1104093859044109425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mainChar_climb_1
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 31
+        width: 96
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba18a8c512e9a3880800000000000000
+      internalID: -8630411869778443861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mainChar_climb_2
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 31
+        width: 96
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4bdec0a1a4a048140800000000000000
+      internalID: 4720909622772034996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mainChar_climb_3
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 31
+        width: 71
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e93f4330ebc7c6330800000000000000
+      internalID: 3705473748958507934
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []

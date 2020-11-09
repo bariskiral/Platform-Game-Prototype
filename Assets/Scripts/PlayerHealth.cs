@@ -10,6 +10,8 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private float knockUpDiv = 2f;
     [SerializeField] private TextMeshProUGUI healthText;
 
+    [HideInInspector] public bool playerIsDead;
+
     private GameObject player;
     private Animator anim;
     private Rigidbody2D rb;
@@ -52,8 +54,10 @@ public class PlayerHealth : MonoBehaviour
     private void Died()
     {
         player.GetComponent<Animation>().Stop("Damaged");
-        anim.SetBool("isDead", true);
+        playerIsDead = true;
+        anim.SetBool("isDead", playerIsDead);
         rb.velocity = Vector2.zero;
+        rb.mass = 10000;
         player.GetComponent<PlayerController>().enabled = false;
     }
 

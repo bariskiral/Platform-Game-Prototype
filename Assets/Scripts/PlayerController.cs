@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     private RaycastHit2D ladderInfo;
     private RaycastHit2D wallInfo;
     private RaycastHit2D ledgeInfo;
+    private Vector2 playerCoord;
+    private Vector2 offsetCoord;
 
     private int extraJumps;
     private bool jumpInput;
@@ -106,7 +108,9 @@ public class PlayerController : MonoBehaviour
     {
         rb.velocity = new Vector2(moveInput.x * moveSpeed, rb.velocity.y);
         anim.SetFloat("Speed", Math.Abs(moveInput.x));
-        
+        anim.SetBool("isWallSliding", isWallSliding);
+        anim.SetBool("isGrounded", isGrounded);
+
         if (isWallSliding)
         {
             if (rb.velocity.y < -wallSlideSpeed)
@@ -142,6 +146,7 @@ public class PlayerController : MonoBehaviour
             if (extraJumps > 0)
             {
                 rb.velocity = Vector2.up * jumpSpeed;
+                anim.SetTrigger("Jump");
                 extraJumps--;
             }
 
@@ -166,11 +171,14 @@ public class PlayerController : MonoBehaviour
     {
         if (wallInfo && !ledgeInfo && !isClimbing)
         {
-            Vector2 playerCoord = transform.position;
-            Vector2 offsetCoord = new Vector2(1f * playerDirection, 1f);
-            //TODO: Player climb animation and add animation event to change position.
-            transform.position = playerCoord + offsetCoord;
+            anim.SetTrigger("Climb");
+            playerCoord = transform.position;
+            offsetCoord = new Vector2(1f * playerDirection, 1f);
         }       
+    }
+    private void CommitClimb()
+    {
+        transform.position = playerCoord + offsetCoord;
     }
 
     private void LadderClimb()
@@ -210,6 +218,7 @@ public class PlayerController : MonoBehaviour
     private void Dashing()
     {
         Physics2D.IgnoreLayerCollision(9, 11, isDashing);
+        Physics2D.IgnoreLayerCollision(9, 14, isDashing);
 
         if (isDashing)
         {

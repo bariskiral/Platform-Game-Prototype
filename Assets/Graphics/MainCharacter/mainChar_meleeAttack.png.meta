@@ -1,7 +1,22 @@
 fileFormatVersion: 2
 guid: c572de25c252fa64ba14ff61e190dce5
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -5080138918562011981
+    second: mainChar_meleeAttack_0
+  - first:
+      213: 5619058865685865278
+    second: mainChar_meleeAttack_1
+  - first:
+      213: -1249272973133959737
+    second: mainChar_meleeAttack_2
+  - first:
+      213: -4606938798227835204
+    second: mainChar_meleeAttack_3
+  - first:
+      213: 2951030707076146224
+    second: mainChar_meleeAttack_4
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -87,7 +102,112 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: mainChar_meleeAttack_0
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 5
+        width: 165
+        height: 92
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4456522}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b4697db198bf79b0800000000000000
+      internalID: -5080138918562011981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mainChar_meleeAttack_1
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 5
+        width: 165
+        height: 92
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4456522}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e33273d6448eafd40800000000000000
+      internalID: 5619058865685865278
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mainChar_meleeAttack_2
+      rect:
+        serializedVersion: 2
+        x: 411
+        y: 5
+        width: 165
+        height: 92
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4456522}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7cdaad099d0b9aee0800000000000000
+      internalID: -1249272973133959737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mainChar_meleeAttack_3
+      rect:
+        serializedVersion: 2
+        x: 603
+        y: 5
+        width: 165
+        height: 92
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4456522}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb63aa5529dd010c0800000000000000
+      internalID: -4606938798227835204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mainChar_meleeAttack_4
+      rect:
+        serializedVersion: 2
+        x: 795
+        y: 5
+        width: 165
+        height: 92
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4456522}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0342b88faca24f820800000000000000
+      internalID: 2951030707076146224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []

@@ -46,7 +46,7 @@ public class TurretScript : MonoBehaviour
 
         if (hit.distance <= distance)
         {
-            if (hit.collider.gameObject == player)
+            if (hit.collider.gameObject == player && !player.GetComponent<PlayerHealth>().playerIsDead)
             {
                 seesPlayer = true;
             }
