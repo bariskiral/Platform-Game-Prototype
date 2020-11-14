@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
-using UnityEditor;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -15,10 +13,11 @@ public class PlayerController : MonoBehaviour
     private RaycastHit2D ledgeInfo;
     private Vector2 playerCoord;
     private Vector2 offsetCoord;
+    private TrailRenderer trailRenderer;
 
     private int extraJumps;
-    private bool jumpInput;
     private float currDashTimer;
+    private float hangCounter;
     private float elapsedTime = 0f;
     private float playerDirection = 1f;
 
@@ -49,6 +48,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int jumpCount;
     [SerializeField] private float jumpSpeed = 15f;
     [SerializeField] private float jumpDelay;
+    [SerializeField] private float hangTime = 0.15f;
     [SerializeField] private float gravityMultiplier = 1f;
 
     [Header("Dash")]
@@ -61,12 +61,15 @@ public class PlayerController : MonoBehaviour
         inputControls = new InputControls();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        trailRenderer = GetComponent<TrailRenderer>();
+        
     }
 
     void Start()
     {
         extraJumps = jumpCount;
-        inputControls.Player.Jump.performed += ctx => Jump();
+        inputControls.Player.Jump.performed += ctx => HoldJump();
+        inputControls.Player.Jump.canceled += ctx => TapJump();
         inputControls.Player.Dash.performed += ctx => Dash();
     }
 
@@ -90,7 +93,6 @@ public class PlayerController : MonoBehaviour
     private void CheckInput()
     {
         moveInput = inputControls.Player.Move.ReadValue<Vector2>();
-        jumpInput = inputControls.Player.Jump.triggered;
     }
 
     private void CheckSurroundings()
@@ -118,6 +120,15 @@ public class PlayerController : MonoBehaviour
                 rb.velocity = new Vector2(rb.velocity.x, -wallSlideSpeed);
             }
         }
+
+        if (isGrounded)
+        {
+            hangCounter = hangTime;
+        }
+        else
+        {
+            hangCounter -= Time.deltaTime; 
+        }
     }
 
     private void Flip()
@@ -134,23 +145,31 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Jump()
+    private void HoldJump()
     {
         if (Time.time >= elapsedTime)
         {
-            if (isGrounded)
+            if (hangCounter > 0)
             {
                 extraJumps = jumpCount;
             }
 
             if (extraJumps > 0)
             {
-                rb.velocity = Vector2.up * jumpSpeed;
+                rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
                 anim.SetTrigger("Jump");
                 extraJumps--;
             }
 
             elapsedTime = Time.time + jumpDelay;
+        }
+    }
+
+    private void TapJump()
+    {
+        if (rb.velocity.y > 0)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.05f);
         }
     }
 
@@ -219,6 +238,7 @@ public class PlayerController : MonoBehaviour
     {
         Physics2D.IgnoreLayerCollision(9, 11, isDashing);
         Physics2D.IgnoreLayerCollision(9, 14, isDashing);
+        trailRenderer.enabled = isDashing;
 
         if (isDashing)
         {
