@@ -17,7 +17,6 @@ public class FoolKing : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private float walkSpeed;
     [SerializeField] private float walkSpeedEnrage;
-    [SerializeField] private float idleDelay;
     [SerializeField] private bool enraged;
 
     [Header("Combat")]
@@ -39,9 +38,12 @@ public class FoolKing : MonoBehaviour
     [SerializeField] private int spawnedEnemyCountEnrage;
 
     private bool notAttacking;
+    private bool playerDashing;
+    private bool meleeAttack;
+    private bool following;
     private float _touchDmgTime;
     private float _meleeDelay;
-    private float _idleDelay;
+    private int rnd;
 
     private Animator foolKingAnim;
     private Rigidbody2D foolKingRb;
@@ -58,47 +60,55 @@ public class FoolKing : MonoBehaviour
         foolKingAnim = GetComponent<Animator>();
     }
 
-    private void Update()
-    {
-        StateChanger();
-        EnrageUpdate();
-    }
-
     private void FixedUpdate()
     {
-        foolKingAnim.SetFloat("Speed", System.Math.Abs(foolKingRb.velocity.x));
-        foolKingAnim.SetBool("Enraged", enraged);
-    }
+        FK_PlayerInRange();
+        EnrageUpdate();
+        StateChanger();
 
+        playerDashing = player.GetComponent<PlayerController>().isDashing;
+        foolKingAnim.SetBool("Enraged", enraged);
+        foolKingAnim.SetBool("MeleeAttack", meleeAttack);
+        foolKingAnim.SetBool("Follow", following);
+    }
 
     private void StateChanger()
     {
         // idle - follow - melee - ranged - spawn
-        if (_idleDelay <= 0)
+        
+        if (_touchDmgTime <= 0)
         {
-            _idleDelay = idleDelay;
-
-            int rnd = Random.Range(0, 3);
-
-            if (rnd == 0)
-            {
-                foolKingAnim.SetTrigger("Follow");
-                Debug.Log("0");
-            }
-            else if (rnd == 1)
-            {
-                foolKingAnim.SetTrigger("DamageWall");
-                Debug.Log("1");
-            }
-            else if (rnd == 2)
-            {
-                foolKingAnim.SetTrigger("Spawn");
-                Debug.Log("2");
-            }
+            rnd = Random.Range(0, 7);
+            _touchDmgTime = touchDmgTime;
         }
         else
         {
-            _idleDelay -= Time.deltaTime;
+            _touchDmgTime -= Time.deltaTime;
+        }
+
+        switch (rnd)
+        {
+            case 0:
+                following = true;
+                break;
+            case 1:
+                following = true;
+                break;
+            case 2:
+                following = true;
+                break;
+            case 3:
+                foolKingAnim.SetTrigger("DamageWall");
+                break;
+            case 4:
+                foolKingAnim.SetTrigger("Spawn");
+                break;
+            case 5:
+                following = true;
+                break;
+            case 6:
+                following = true;
+                break;
         }
     }
 
@@ -107,20 +117,29 @@ public class FoolKing : MonoBehaviour
         foolKingRb.velocity = new Vector2(0, foolKingRb.velocity.y);
     }
 
-    public void FK_Follow()
+    private void FK_PlayerInRange()
     {
         RaycastHit2D hit = Physics2D.Linecast(hitPoint.position, target.position, whatIsObstacle);
         Debug.DrawLine(hitPoint.position, hit.point, Color.red);
 
-        if (hit.distance <= attackDistance)
+        if (hit.distance <= attackDistance && !playerDashing)
         {
             notAttacking = false;
             foolKingRb.velocity = new Vector2(0, foolKingRb.velocity.y);
-            foolKingAnim.SetTrigger("MeleeAttack");
+            meleeAttack = true;
         }
-
-        else if (notAttacking)
+        else
         {
+            notAttacking = true;
+            meleeAttack = false;
+        }
+    }
+
+    public void FK_Follow()
+    {
+        if (notAttacking)
+        {
+            following = true;
             if (transform.position.x < target.position.x)
             {
                 foolKingRb.velocity = new Vector2(walkSpeed, foolKingRb.velocity.y);
@@ -132,10 +151,9 @@ public class FoolKing : MonoBehaviour
                 transform.eulerAngles = new Vector2(0, -180);
             }
         }
-
         else
         {
-            notAttacking = true;
+            following = false;
         }
     }
 
