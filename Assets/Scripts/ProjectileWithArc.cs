@@ -74,9 +74,9 @@ public class ProjectileWithArc : MonoBehaviour
             if (playerInRange != null)
             {
                 playerInRange.TakeDamage(proWithArcDmg);
+                playerRb.AddForce(transform.right * -knockPower);
             }
         }
-        playerRb.AddForce(transform.right * -knockPower);
         hasExploded = true;
         Destroy(gameObject);
     }

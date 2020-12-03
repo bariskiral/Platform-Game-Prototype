@@ -7,6 +7,8 @@ TagManager:
   - Ground
   - Enemy
   - PlayerProjectile
+  - EnemyProjectile
+  - FoolKing
   layers:
   - Default
   - TransparentFX
