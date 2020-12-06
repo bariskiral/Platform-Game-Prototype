@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class FoolKing : MonoBehaviour
 {
+    #region Variables
+
     [Header("Drag Components")]
     [SerializeField] private LayerMask damageTarget;
     [SerializeField] private LayerMask whatIsObstacle;
@@ -17,6 +19,13 @@ public class FoolKing : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private float walkSpeed;
     [SerializeField] private float walkSpeedEnrage;
+
+    [Header("Behaviours")]
+    [SerializeField] private bool following;
+    [SerializeField] private bool idle;
+    [SerializeField] private bool meleeAttack;
+    [SerializeField] private bool damageWall;
+    [SerializeField] private bool spawn;
     [SerializeField] private bool enraged;
 
     [Header("Combat")]
@@ -37,10 +46,7 @@ public class FoolKing : MonoBehaviour
     [SerializeField] private int spawnedEnemyCount;
     [SerializeField] private int spawnedEnemyCountEnrage;
 
-    private bool notAttacking;
     private bool playerDashing;
-    private bool meleeAttack;
-    private bool following;
     private float _touchDmgTime;
     private float _meleeDelay;
     private int rnd;
@@ -50,6 +56,8 @@ public class FoolKing : MonoBehaviour
     private GameObject player;
     private PlayerHealth playerHealth;
     private Transform target;
+
+    #endregion
 
     private void Awake()
     {
@@ -63,8 +71,7 @@ public class FoolKing : MonoBehaviour
     private void FixedUpdate()
     {
         FK_PlayerInRange();
-        EnrageUpdate();
-        StateChanger();
+        FK_EnrageUpdate();
 
         playerDashing = player.GetComponent<PlayerController>().isDashing;
         foolKingAnim.SetBool("Enraged", enraged);
@@ -72,44 +79,37 @@ public class FoolKing : MonoBehaviour
         foolKingAnim.SetBool("Follow", following);
     }
 
-    private void StateChanger()
+    private void FK_StateChanger()
     {
-        // idle - follow - melee - ranged - spawn
-        
-        if (_touchDmgTime <= 0)
+        rnd = Random.Range(0, 3);
+
+        following = false;
+        damageWall = false;
+        spawn = false;
+        idle = false;
+
+        if (rnd == 0 && !meleeAttack)
         {
-            rnd = Random.Range(0, 7);
-            _touchDmgTime = touchDmgTime;
-        }
-        else
-        {
-            _touchDmgTime -= Time.deltaTime;
+            following = true;
         }
 
-        switch (rnd)
+        else if (rnd == 1 && !meleeAttack)
         {
-            case 0:
-                following = true;
-                break;
-            case 1:
-                following = true;
-                break;
-            case 2:
-                following = true;
-                break;
-            case 3:
-                foolKingAnim.SetTrigger("DamageWall");
-                break;
-            case 4:
-                foolKingAnim.SetTrigger("Spawn");
-                break;
-            case 5:
-                following = true;
-                break;
-            case 6:
-                following = true;
-                break;
+            damageWall = true;
+            foolKingAnim.SetTrigger("DamageWall");
         }
+
+        else if (rnd == 2 && !meleeAttack)
+        {
+            spawn = true;
+            foolKingAnim.SetTrigger("Spawn");
+        }
+
+        else
+        {
+            idle = true;
+        }
+        Debug.Log("Yeni Sayi: " + rnd);
     }
 
     public void FK_Idle()
@@ -124,20 +124,18 @@ public class FoolKing : MonoBehaviour
 
         if (hit.distance <= attackDistance && !playerDashing)
         {
-            notAttacking = false;
             foolKingRb.velocity = new Vector2(0, foolKingRb.velocity.y);
             meleeAttack = true;
         }
         else
         {
-            notAttacking = true;
             meleeAttack = false;
         }
     }
 
     public void FK_Follow()
     {
-        if (notAttacking)
+        if (!meleeAttack)
         {
             following = true;
             if (transform.position.x < target.position.x)
@@ -187,7 +185,7 @@ public class FoolKing : MonoBehaviour
         }
     }
 
-    private void EnrageUpdate()
+    private void FK_EnrageUpdate()
     {
         if (enraged) //hp<=%50
         {
